@@ -1,7 +1,34 @@
+// Test pattern matching
+
+enum Color {
+    Red,
+    Green,
+    Blue,
+}
+
 fn main() {
-    let x = 5;
+    let c = Color::Green;
+    
+    print("Testing enum match:");
+    match c {
+        Color::Red => print("It is Red"),
+        Color::Green => print("It is Green"),
+        Color::Blue => print("It is Blue"),
+    }
+
+    print("Testing number match:");
+    let x = 2;
     match x {
-        5 => print("five"),
-        _ => print("other"),
+        1 => print("One"),
+        2 => print("Two"),
+        3 => print("Three"),
+        _ => print("Other"),
+    }
+
+    print("Testing wildcard match:");
+    let y = 10;
+    match y {
+        1 => print("One"),
+        _ => print("Not One"),
     }
 }

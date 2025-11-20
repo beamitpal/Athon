@@ -40,10 +40,15 @@ impl Parser {
                 enums.push(self.parse_enum());
             } else if self.current.kind == TokenKind::Fn {
                 functions.push(self.parse_function());
+            } else if self.current.kind == TokenKind::Import {
+                let imported_program = self.parse_import();
+                structs.extend(imported_program.structs);
+                enums.extend(imported_program.enums);
+                functions.extend(imported_program.functions);
             } else {
                 eprintln!(
-                    "Error at line {}, column {}: Expected 'struct', 'enum', or 'fn'",
-                    self.current.line, self.current.column
+                    "Error at line {}, column {}: Expected 'import', 'struct', 'enum', or 'fn', got '{}'",
+                    self.current.line, self.current.column, self.current.text
                 );
                 process::exit(1);
             }
@@ -54,6 +59,35 @@ impl Parser {
             enums,
             functions,
         }
+    }
+
+    fn parse_import(&mut self) -> Program {
+        if !self.expect(TokenKind::Import) {
+            eprintln!("Expected 'import'");
+            process::exit(1);
+        }
+
+        let filename = if self.current.kind == TokenKind::StringLiteral {
+            let s = self.current.text.clone();
+            self.advance();
+            s
+        } else {
+            eprintln!("Expected string literal after 'import'");
+            process::exit(1);
+        };
+
+        // Read file content
+        let content = match std::fs::read_to_string(&filename) {
+            Ok(c) => c,
+            Err(e) => {
+                eprintln!("Error reading imported file '{}': {}", filename, e);
+                process::exit(1);
+            }
+        };
+
+        // Parse imported content
+        let mut parser = Parser::new(&content);
+        parser.parse_program()
     }
 
     fn parse_enum(&mut self) -> EnumDef {
@@ -614,7 +648,10 @@ impl Parser {
 
                 Statement::Expr(Expr::Call { name, args })
             } else {
-                eprintln!("Unexpected token after identifier");
+                eprintln!(
+                    "Error at line {}, column {}: Unexpected token '{}' after identifier",
+                    self.current.line, self.current.column, self.current.text
+                );
                 process::exit(1);
             }
         } else {

@@ -58,6 +58,13 @@ for example in examples/*.at; do
         continue
     fi
     
+    # Skip library files (no main function)
+    if [[ "$name" == *"_lib" ]]; then
+        echo -e "${YELLOW}SKIP${NC} (library file)"
+        skipped=$((skipped + 1))
+        continue
+    fi
+    
     # Compile to C
     if ! ./athon-boot "$example" > "$TEMP_DIR/$name.c" 2>&1; then
         echo -e "${RED}FAIL${NC} (compilation failed)"

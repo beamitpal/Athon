@@ -1,0 +1,9 @@
+// Math library module
+
+fn square(x: int) -> int {
+    return x * x;
+}
+
+fn cube(x: int) -> int {
+    return x * x * x;
+}

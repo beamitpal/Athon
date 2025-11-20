@@ -1,0 +1,12 @@
+import "examples/math_lib.at"
+
+fn main() {
+    let x = 5;
+    print("Number: {}", x);
+    
+    let s = square(x);
+    print("Square: {}", s);
+    
+    let c = cube(x);
+    print("Cube: {}", c);
+}

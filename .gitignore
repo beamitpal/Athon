@@ -2,6 +2,7 @@
 
 # Compiled binaries
 athon-boot
+athon
 *.out
 *.exe
 *.o

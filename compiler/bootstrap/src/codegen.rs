@@ -120,9 +120,7 @@ pub fn emit_c(program: &Program) {
 }
 
 fn emit_function(func: &Function) {
-    let return_type = func
-        .return_type.as_deref()
-        .unwrap_or("void");
+    let return_type = func.return_type.as_deref().unwrap_or("void");
     let c_return_type = match return_type {
         "int" => "int".to_string(),
         "bool" => "int".to_string(),
@@ -284,13 +282,11 @@ fn emit_statement(stmt: &Statement, indent: usize) {
 
             // Generate if-else chain for pattern matching
             let mut first = true;
-            let mut has_wildcard = false;
 
             for arm in arms {
                 match &arm.pattern {
                     Pattern::Wildcard => {
                         // Wildcard always matches - emit as final else
-                        has_wildcard = true;
                         if !first {
                             print!("{}    }} else {{", ind);
                         } else {
@@ -375,7 +371,7 @@ fn emit_statement(stmt: &Statement, indent: usize) {
                             let mut c_format = format_str.clone();
 
                             // Count placeholders
-                            let placeholder_count = format_str.matches("{}").count();
+                            let _placeholder_count = format_str.matches("{}").count();
 
                             // Replace with %d by default (could be improved with type checking)
                             c_format = c_format.replace("{}", "%d");
