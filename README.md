@@ -239,7 +239,7 @@ See [LICENSE](LICENSE) for license information.
 
 - **Issues:** [Issue Tracker]
 - **Discussions:** [Discussion Forum]
-- **Email:** maintainers@athon.org (Placeholder)
+- **Email:** me@beamitpal.com (Placeholder)
 
 ---
 
