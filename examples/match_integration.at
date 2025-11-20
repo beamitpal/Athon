@@ -1,0 +1,70 @@
+// Integration test: Pattern matching with other features
+
+enum Operation {
+    Add,
+    Subtract,
+    Multiply,
+    Divide,
+}
+
+struct Calculator {
+    result: int,
+}
+
+fn perform_operation(op: int, a: int, b: int) -> int {
+    let result = 0;
+    match op {
+        Operation::Add => result = a + b,
+        Operation::Subtract => result = a - b,
+        Operation::Multiply => result = a * b,
+        Operation::Divide => {
+            if b != 0 {
+                result = a / b;
+            } else {
+                result = 0;
+            }
+        },
+    }
+    return result;
+}
+
+fn main() {
+    print("=== Calculator with Pattern Matching ===");
+    
+    // Test addition
+    let sum = perform_operation(Operation::Add, 10, 5);
+    print("10 + 5 = {}", sum);
+    
+    // Test subtraction
+    let diff = perform_operation(Operation::Subtract, 10, 5);
+    print("10 - 5 = {}", diff);
+    
+    // Test multiplication
+    let prod = perform_operation(Operation::Multiply, 10, 5);
+    print("10 * 5 = {}", prod);
+    
+    // Test division
+    let quot = perform_operation(Operation::Divide, 10, 5);
+    print("10 / 5 = {}", quot);
+    
+    // Test division by zero
+    let zero = perform_operation(Operation::Divide, 10, 0);
+    print("10 / 0 = {} (safe!)", zero);
+    
+    // Use struct
+    let calc = Calculator { result: 42 };
+    print("");
+    print("Calculator result: {}", calc.result);
+    
+    // Match in loop
+    print("");
+    print("=== Operations 0-3 ===");
+    for i in 0..4 {
+        match i {
+            Operation::Add => print("Operation {}: Add", i),
+            Operation::Subtract => print("Operation {}: Subtract", i),
+            Operation::Multiply => print("Operation {}: Multiply", i),
+            Operation::Divide => print("Operation {}: Divide", i),
+        }
+    }
+}

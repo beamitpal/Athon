@@ -1,0 +1,18 @@
+// Test string functions
+
+fn main() {
+    let s1 = "Hello";
+    let s2 = "World";
+    
+    // Length
+    let len1 = length(s1);
+    print("s1 length: {}", len1);
+    
+    // Comparison (strcmp returns 0 if equal)
+    let cmp = compare(s1, s2);
+    print("compare result: {}", cmp);
+    
+    // Note: concat modifies first arg in C, 
+    // so we'd need proper buffer management
+    // Skipping concat test for now
+}

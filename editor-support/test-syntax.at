@@ -1,0 +1,582 @@
+// Comprehensive Athōn Syntax Test File
+// Use this file to test syntax highlighting in your editor
+
+/* Multi-line comment
+   This should be highlighted as a comment
+   Nested comments are not supported */
+
+// ============================================================================
+// IMPORTS AND DECLARATIONS
+// ============================================================================
+
+// Struct definitions
+struct Point {
+    x: int,
+    y: int,
+}
+
+struct Rectangle {
+    width: int,
+    height: int,
+    color: int,
+}
+
+// Enum definitions
+enum Color {
+    Red,
+    Green,
+    Blue,
+    RGB,
+}
+
+enum Status {
+    Ok,
+    Error,
+    Pending,
+}
+
+enum Direction {
+    North,
+    South,
+    East,
+    West,
+}
+
+// ============================================================================
+// FUNCTIONS
+// ============================================================================
+
+// Function with return type
+fn calculate_area(rect: Rectangle) -> int {
+    return rect.width * rect.height;
+}
+
+// Function without return type
+fn print_point(p: Point) {
+    print("Point: ({}, {})", p.x, p.y);
+}
+
+// Function with math operations
+fn distance(p1: Point, p2: Point) -> int {
+    let dx = abs(p2.x - p1.x);
+    let dy = abs(p2.y - p1.y);
+    let dist_squared = dx * dx + dy * dy;
+    return sqrt(dist_squared);
+}
+
+// Function with file I/O
+fn save_data(filename: string, data: string) -> int {
+    if file_exists(filename) == 1 {
+        print("File already exists: {}", filename);
+        return 0;
+    }
+    
+    let result = file_write(filename, data);
+    if result == 1 {
+        print("Data saved successfully");
+    } else {
+        print("Failed to save data");
+    }
+    return result;
+}
+
+// Function with pattern matching
+fn describe_status(s: int) {
+    match s {
+        Status::Ok => print("Everything is OK"),
+        Status::Error => print("An error occurred"),
+        Status::Pending => print("Operation pending"),
+    }
+}
+
+// Function with complex pattern matching
+fn get_direction_name(d: int) -> int {
+    let result = 0;
+    match d {
+        Direction::North => {
+            print("Going North");
+            result = 1;
+        },
+        Direction::South => {
+            print("Going South");
+            result = 2;
+        },
+        Direction::East => {
+            print("Going East");
+            result = 3;
+        },
+        Direction::West => {
+            print("Going West");
+            result = 4;
+        },
+    }
+    return result;
+}
+
+// ============================================================================
+// MAIN FUNCTION
+// ============================================================================
+
+fn main() {
+    // ========================================================================
+    // VARIABLE DECLARATIONS
+    // ========================================================================
+    
+    // Integer variables
+    let x = 42;
+    let y = -10;
+    let hex_value = 0xFF;
+    let zero = 0;
+    
+    // Boolean variables
+    let flag = true;
+    let is_active = false;
+    
+    // String variables
+    let name = "Athōn";
+    let message = "Hello, World!";
+    let template = "Value: {}, Flag: {}";
+    let empty = "";
+    
+    // ========================================================================
+    // ARITHMETIC OPERATIONS
+    // ========================================================================
+    
+    let sum = x + y;
+    let diff = x - y;
+    let product = x * y;
+    let quotient = x / 2;
+    let remainder = x % 5;
+    
+    // Complex expressions
+    let complex = (x + y) * (x - y) / 2;
+    let nested = ((x + 1) * (y - 1)) / ((x - 1) + (y + 1));
+    
+    // ========================================================================
+    // COMPARISON OPERATIONS
+    // ========================================================================
+    
+    let is_equal = x == 42;
+    let is_not_equal = x != y;
+    let is_greater = x > y;
+    let is_less = x < 100;
+    let is_greater_equal = x >= 42;
+    let is_less_equal = y <= 0;
+    
+    // ========================================================================
+    // LOGICAL OPERATIONS
+    // ========================================================================
+    
+    let and_result = flag && is_equal;
+    let or_result = flag || is_greater;
+    let not_result = !flag;
+    let complex_logic = (x > 0 && x < 100) || (y < 0 && y > -100);
+    
+    // ========================================================================
+    // CONTROL FLOW - IF/ELSE
+    // ========================================================================
+    
+    if x > 0 {
+        print("x is positive: {}", x);
+    }
+    
+    if x > 0 {
+        print("x is positive");
+    } else {
+        print("x is not positive");
+    }
+    
+    if x > 0 {
+        print("x is positive: {}", x);
+    } else if x < 0 {
+        print("x is negative: {}", x);
+    } else {
+        print("x is zero");
+    }
+    
+    // ========================================================================
+    // CONTROL FLOW - WHILE LOOP
+    // ========================================================================
+    
+    let counter = 0;
+    while counter < 5 {
+        print("Counter: {}", counter);
+        counter = counter + 1;
+    }
+    
+    let i = 10;
+    while i > 0 {
+        if i % 2 == 0 {
+            print("Even: {}", i);
+        }
+        i = i - 1;
+    }
+    
+    // ========================================================================
+    // CONTROL FLOW - FOR LOOP
+    // ========================================================================
+    
+    for i in 0..10 {
+        print("i = {}", i);
+    }
+    
+    for i in 0..10 {
+        if i % 2 == 0 {
+            print("Even: {}", i);
+        } else {
+            print("Odd: {}", i);
+        }
+    }
+    
+    for i in 0..5 {
+        for j in 0..5 {
+            let product = i * j;
+            print("{} * {} = {}", i, j, product);
+        }
+    }
+    
+    // ========================================================================
+    // STRUCTS
+    // ========================================================================
+    
+    // Struct creation
+    let point = Point { x: 10, y: 20 };
+    let origin = Point { x: 0, y: 0 };
+    
+    let rect = Rectangle {
+        width: 100,
+        height: 50,
+        color: Color::Blue,
+    };
+    
+    // Struct member access
+    let px = point.x;
+    let py = point.y;
+    let area = rect.width * rect.height;
+    
+    print_point(point);
+    print_point(origin);
+    
+    let calculated_area = calculate_area(rect);
+    print("Rectangle area: {}", calculated_area);
+    
+    let dist = distance(point, origin);
+    print("Distance: {}", dist);
+    
+    // ========================================================================
+    // ENUMS
+    // ========================================================================
+    
+    // Enum creation
+    let status = Status::Ok;
+    let error_status = Status::Error;
+    let pending_status = Status::Pending;
+    
+    let color = Color::Red;
+    let green = Color::Green;
+    let blue = Color::Blue;
+    
+    let direction = Direction::North;
+    
+    // Enum comparison
+    if status == Status::Ok {
+        print("Status is OK");
+    }
+    
+    if color == Color::Red {
+        print("Color is Red");
+    }
+    
+    // ========================================================================
+    // PATTERN MATCHING - SIMPLE
+    // ========================================================================
+    
+    match status {
+        Status::Ok => print("Everything is OK"),
+        Status::Error => print("An error occurred"),
+        Status::Pending => print("Operation pending"),
+    }
+    
+    match color {
+        Color::Red => print("Red color"),
+        Color::Green => print("Green color"),
+        Color::Blue => print("Blue color"),
+        _ => print("Unknown color"),
+    }
+    
+    // ========================================================================
+    // PATTERN MATCHING - WITH BLOCKS
+    // ========================================================================
+    
+    match status {
+        Status::Ok => {
+            print("Success!");
+            print("Everything is working fine");
+        },
+        Status::Error => {
+            print("Error occurred");
+            print("Please try again");
+        },
+        Status::Pending => {
+            print("Operation pending");
+            print("Please wait");
+        },
+    }
+    
+    // ========================================================================
+    // PATTERN MATCHING - NUMBERS
+    // ========================================================================
+    
+    let number = 42;
+    match number {
+        0 => print("Zero"),
+        1 => print("One"),
+        42 => print("The answer!"),
+        _ => print("Some other number: {}", number),
+    }
+    
+    for i in 0..5 {
+        match i {
+            0 => print("Zero"),
+            1 => print("One"),
+            2 => print("Two"),
+            _ => print("Other: {}", i),
+        }
+    }
+    
+    // ========================================================================
+    // MATH FUNCTIONS
+    // ========================================================================
+    
+    let abs_value = abs(-15);
+    let minimum = min(10, 20);
+    let maximum = max(10, 20);
+    let power = pow(2, 8);
+    let square_root = sqrt(144);
+    let modulo = mod(17, 5);
+    
+    print("Math results:");
+    print("  abs(-15) = {}", abs_value);
+    print("  min(10, 20) = {}", minimum);
+    print("  max(10, 20) = {}", maximum);
+    print("  pow(2, 8) = {}", power);
+    print("  sqrt(144) = {}", square_root);
+    print("  mod(17, 5) = {}", modulo);
+    
+    // Nested math functions
+    let nested_math = max(abs(min(-10, 5)), sqrt(pow(3, 2)));
+    print("Nested: {}", nested_math);
+    
+    // ========================================================================
+    // STRING FUNCTIONS
+    // ========================================================================
+    
+    let text = "Hello";
+    let text_length = length(text);
+    let combined = concat("Hello", " World");
+    let comparison = compare("abc", "def");
+    
+    print("String results:");
+    print("  length('Hello') = {}", text_length);
+    print("  concat('Hello', ' World') = {}", combined);
+    print("  compare('abc', 'def') = {}", comparison);
+    
+    // ========================================================================
+    // ARRAY OPERATIONS
+    // ========================================================================
+    
+    let numbers = [1, 2, 3, 4, 5];
+    let array_len = array_length(numbers);
+    let first = numbers[0];
+    let last = numbers[4];
+    let middle = numbers[2];
+    
+    print("Array operations:");
+    print("  length = {}", array_len);
+    print("  first = {}", first);
+    print("  middle = {}", middle);
+    print("  last = {}", last);
+    
+    // Array iteration
+    for i in 0..array_len {
+        let element = numbers[i];
+        print("  numbers[{}] = {}", i, element);
+    }
+    
+    // ========================================================================
+    // FILE I/O OPERATIONS
+    // ========================================================================
+    
+    let filename = "test_output.txt";
+    let data = "This is test data\nWith multiple lines\n";
+    
+    // Write to file
+    let write_result = save_data(filename, data);
+    
+    // Check if file exists
+    if file_exists(filename) == 1 {
+        print("File exists: {}", filename);
+        
+        // Read from file
+        let file_content = file_read(filename);
+        print("File read successfully");
+        
+        // Append to file
+        let append_result = file_append(filename, "Appended line\n");
+        if append_result == 1 {
+            print("Data appended successfully");
+        }
+    } else {
+        print("File does not exist: {}", filename);
+    }
+    
+    // ========================================================================
+    // COMPLEX EXPRESSIONS
+    // ========================================================================
+    
+    // Complex arithmetic
+    let complex_calc = (x + y) * (maximum - minimum) / abs_value;
+    
+    // Complex logic
+    let complex_condition = (x > 0 && y < 0) || (x == 42 && flag);
+    
+    // Nested function calls
+    let nested_result = max(abs(min(-10, 5)), sqrt(pow(3, 2)));
+    
+    // Combined operations
+    let combined_result = calculate_area(rect) + distance(point, origin);
+    
+    print("Complex results:");
+    print("  complex_calc = {}", complex_calc);
+    print("  nested_result = {}", nested_result);
+    print("  combined_result = {}", combined_result);
+    
+    // ========================================================================
+    // EDGE CASES
+    // ========================================================================
+    
+    // Empty string
+    let empty_str = "";
+    let empty_len = length(empty_str);
+    
+    // Zero values
+    let zero_div = 10 / 1;
+    let zero_mod = 10 % 10;
+    
+    // Negative numbers
+    let neg1 = -1;
+    let neg100 = -100;
+    let neg_abs = abs(neg100);
+    
+    // Boolean edge cases
+    let true_and_false = true && false;
+    let true_or_false = true || false;
+    let not_true = !true;
+    let not_false = !false;
+    
+    // ========================================================================
+    // FINAL OUTPUT
+    // ========================================================================
+    
+    print("");
+    print("╔════════════════════════════════════════╗");
+    print("║  Syntax Highlighting Test Complete!   ║");
+    print("╚════════════════════════════════════════╝");
+}
+
+// ============================================================================
+// ADDITIONAL TEST FUNCTIONS
+// ============================================================================
+
+fn test_all_operators() {
+    let a = 10;
+    let b = 5;
+    
+    // Arithmetic
+    let add = a + b;
+    let sub = a - b;
+    let mul = a * b;
+    let div = a / b;
+    let mod = a % b;
+    
+    // Comparison
+    let eq = a == b;
+    let ne = a != b;
+    let lt = a < b;
+    let gt = a > b;
+    let le = a <= b;
+    let ge = a >= b;
+    
+    // Logical
+    let and = true && false;
+    let or = true || false;
+    let not = !true;
+    
+    // Assignment
+    let x = 42;
+    x = x + 1;
+    
+    // Range
+    for i in 0..10 {
+        print("i = {}", i);
+    }
+    
+    // Arrow (function return type)
+    // Accessor (struct member, enum variant)
+    let p = Point { x: 1, y: 2 };
+    let px = p.x;
+    let c = Color::Red;
+}
+
+fn test_all_keywords() {
+    // fn - function definition
+    // let - variable declaration
+    // if, else - conditionals
+    // while - while loop
+    // for, in - for loop
+    // match - pattern matching
+    // return - return from function
+    // struct - struct definition
+    // enum - enum definition
+    // true, false - boolean literals
+    // pub - public visibility (future)
+    // cap - capability (future)
+    // region - memory region (future)
+}
+
+fn test_all_types() {
+    let i = 42;           // int
+    let b = true;         // bool
+    let s = "text";       // string
+    let arr = [1, 2, 3];  // array
+    let p = Point { x: 0, y: 0 };  // struct
+    let c = Color::Red;   // enum
+}
+
+fn test_all_builtins() {
+    // I/O
+    print("Hello");
+    
+    // Math
+    let a1 = abs(-5);
+    let a2 = min(1, 2);
+    let a3 = max(1, 2);
+    let a4 = pow(2, 3);
+    let a5 = sqrt(16);
+    let a6 = mod(10, 3);
+    
+    // String
+    let s1 = length("text");
+    let s2 = concat("a", "b");
+    let s3 = compare("a", "b");
+    
+    // Array
+    let arr = [1, 2, 3];
+    let len = array_length(arr);
+    
+    // File I/O
+    let exists = file_exists("file.txt");
+    let content = file_read("file.txt");
+    let write_ok = file_write("file.txt", "data");
+    let append_ok = file_append("file.txt", "more");
+}

@@ -1,0 +1,17 @@
+// Simple pattern matching test
+
+enum Color {
+    Red,
+    Green,
+    Blue,
+}
+
+fn main() {
+    let c = Color::Red;
+    
+    match c {
+        Color::Red => print("Red!"),
+        Color::Green => print("Green!"),
+        Color::Blue => print("Blue!"),
+    }
+}

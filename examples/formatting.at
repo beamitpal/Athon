@@ -1,0 +1,17 @@
+// Test printf-style formatting
+
+fn main() {
+    let x = 10;
+    let y = 20;
+    
+    // Format string with multiple values
+    print("x = {}, y = {}", x, y);
+    
+    // Calculate and format
+    let sum = x + y;
+    print("Sum: {}", sum);
+    
+    // Boolean formatting
+    let flag = true;
+    print("Flag: {}", flag);
+}

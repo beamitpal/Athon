@@ -1,0 +1,17 @@
+fn is_in_range(x: int) -> bool {
+    return x > 0 && x < 100;
+}
+
+fn main() {
+    let valid = is_in_range(50);
+    if valid {
+        print("In range");
+    } else {
+        print("Out of range");
+    }
+    
+    let flag = true;
+    if !flag {
+        print("Flag is false");
+    }
+}

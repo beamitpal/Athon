@@ -1,0 +1,105 @@
+// Math library test
+
+fn test_abs() {
+    print("=== Testing abs() ===");
+    print("abs(5) = {}", abs(5));
+    print("abs(-5) = {}", abs(-5));
+    print("abs(0) = {}", abs(0));
+    print("abs(-100) = {}", abs(-100));
+}
+
+fn test_min_max() {
+    print("");
+    print("=== Testing min() and max() ===");
+    print("min(10, 20) = {}", min(10, 20));
+    print("max(10, 20) = {}", max(10, 20));
+    print("min(-5, 5) = {}", min(-5, 5));
+    print("max(-5, 5) = {}", max(-5, 5));
+    print("min(42, 42) = {}", min(42, 42));
+    print("max(42, 42) = {}", max(42, 42));
+}
+
+fn test_pow() {
+    print("");
+    print("=== Testing pow() ===");
+    print("pow(2, 0) = {}", pow(2, 0));
+    print("pow(2, 1) = {}", pow(2, 1));
+    print("pow(2, 8) = {}", pow(2, 8));
+    print("pow(3, 4) = {}", pow(3, 4));
+    print("pow(10, 3) = {}", pow(10, 3));
+    print("pow(5, 2) = {}", pow(5, 2));
+}
+
+fn test_sqrt() {
+    print("");
+    print("=== Testing sqrt() ===");
+    print("sqrt(0) = {}", sqrt(0));
+    print("sqrt(1) = {}", sqrt(1));
+    print("sqrt(4) = {}", sqrt(4));
+    print("sqrt(9) = {}", sqrt(9));
+    print("sqrt(16) = {}", sqrt(16));
+    print("sqrt(25) = {}", sqrt(25));
+    print("sqrt(100) = {}", sqrt(100));
+    print("sqrt(144) = {}", sqrt(144));
+    print("sqrt(50) = {} (approx)", sqrt(50));
+}
+
+fn test_mod() {
+    print("");
+    print("=== Testing mod() ===");
+    print("mod(10, 3) = {}", mod(10, 3));
+    print("mod(17, 5) = {}", mod(17, 5));
+    print("mod(20, 4) = {}", mod(20, 4));
+    print("mod(7, 2) = {}", mod(7, 2));
+    print("mod(100, 7) = {}", mod(100, 7));
+}
+
+fn calculate_distance(x1: int, y1: int, x2: int, y2: int) -> int {
+    let dx = abs(x2 - x1);
+    let dy = abs(y2 - y1);
+    let dist_squared = dx * dx + dy * dy;
+    return sqrt(dist_squared);
+}
+
+fn test_practical() {
+    print("");
+    print("=== Practical Examples ===");
+    
+    // Calculate distance between two points
+    let dist = calculate_distance(0, 0, 3, 4);
+    print("Distance from (0,0) to (3,4): {}", dist);
+    
+    // Check if number is even using mod
+    let n = 42;
+    if mod(n, 2) == 0 {
+        print("{} is even", n);
+    } else {
+        print("{} is odd", n);
+    }
+    
+    // Find maximum in a sequence
+    let a = 15;
+    let b = 23;
+    let c = 8;
+    let maximum = max(a, max(b, c));
+    print("Max of {}, {}, {}: {}", a, b, c, maximum);
+    
+    // Calculate factorial using pow (2^n pattern)
+    let powers_of_2 = 10;
+    print("Powers of 2:");
+    for i in 0..powers_of_2 {
+        print("  2^{} = {}", i, pow(2, i));
+    }
+}
+
+fn main() {
+    test_abs();
+    test_min_max();
+    test_pow();
+    test_sqrt();
+    test_mod();
+    test_practical();
+    
+    print("");
+    print("=== All math tests completed! ===");
+}

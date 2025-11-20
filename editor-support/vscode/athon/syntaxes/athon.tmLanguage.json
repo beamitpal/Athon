@@ -1,0 +1,153 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Athōn",
+  "scopeName": "source.athon",
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#keywords" },
+    { "include": "#strings" },
+    { "include": "#numbers" },
+    { "include": "#types" },
+    { "include": "#functions" },
+    { "include": "#operators" },
+    { "include": "#constants" }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.double-slash.athon",
+          "match": "//.*$"
+        },
+        {
+          "name": "comment.block.athon",
+          "begin": "/\\*",
+          "end": "\\*/"
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.athon",
+          "match": "\\b(if|else|while|for|in|match|return|break|continue|loop)\\b"
+        },
+        {
+          "name": "keyword.declaration.athon",
+          "match": "\\b(fn|let|struct|enum|pub|cap|region)\\b"
+        },
+        {
+          "name": "keyword.operator.athon",
+          "match": "\\b(and|or|not)\\b"
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.athon",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.athon",
+              "match": "\\\\."
+            },
+            {
+              "name": "constant.other.placeholder.athon",
+              "match": "\\{\\}"
+            }
+          ]
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "name": "constant.numeric.athon",
+          "match": "\\b\\d+\\b"
+        },
+        {
+          "name": "constant.numeric.athon",
+          "match": "\\b0x[0-9a-fA-F]+\\b"
+        }
+      ]
+    },
+    "types": {
+      "patterns": [
+        {
+          "name": "storage.type.athon",
+          "match": "\\b(int|bool|string)\\b"
+        },
+        {
+          "name": "entity.name.type.athon",
+          "match": "\\b[A-Z][a-zA-Z0-9_]*(?=::)"
+        },
+        {
+          "name": "entity.name.type.athon",
+          "match": "\\b[A-Z][a-zA-Z0-9_]*\\b"
+        }
+      ]
+    },
+    "functions": {
+      "patterns": [
+        {
+          "name": "support.function.builtin.athon",
+          "match": "\\b(print|abs|min|max|pow|sqrt|mod|length|concat|compare|array_length|file_read|file_write|file_append|file_exists)\\b"
+        },
+        {
+          "name": "entity.name.function.athon",
+          "match": "\\b([a-z_][a-zA-Z0-9_]*)\\s*(?=\\()"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.arithmetic.athon",
+          "match": "\\+|\\-|\\*|/|%"
+        },
+        {
+          "name": "keyword.operator.comparison.athon",
+          "match": "==|!=|<|>|<=|>="
+        },
+        {
+          "name": "keyword.operator.logical.athon",
+          "match": "&&|\\|\\||!"
+        },
+        {
+          "name": "keyword.operator.assignment.athon",
+          "match": "="
+        },
+        {
+          "name": "keyword.operator.arrow.athon",
+          "match": "->|=>"
+        },
+        {
+          "name": "keyword.operator.range.athon",
+          "match": "\\.\\."
+        },
+        {
+          "name": "punctuation.accessor.athon",
+          "match": "\\.|::"
+        }
+      ]
+    },
+    "constants": {
+      "patterns": [
+        {
+          "name": "constant.language.boolean.athon",
+          "match": "\\b(true|false)\\b"
+        },
+        {
+          "name": "constant.other.enum.athon",
+          "match": "(?<=[A-Z][a-zA-Z0-9_]*::)[A-Z][a-zA-Z0-9_]*\\b"
+        },
+        {
+          "name": "variable.other.constant.athon",
+          "match": "\\b[A-Z][A-Z0-9_]*\\b"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,180 @@
+// Data processing with file I/O
+
+struct DataPoint {
+    value: int,
+    processed: int,
+}
+
+enum ProcessStatus {
+    Success,
+    Failed,
+    Skipped,
+}
+
+fn process_value(val: int) -> int {
+    // Apply some processing (square the value)
+    return val * val;
+}
+
+fn classify_result(result: int) -> int {
+    if result < 100 {
+        return ProcessStatus::Success;
+    }
+    if result < 1000 {
+        return ProcessStatus::Skipped;
+    }
+    return ProcessStatus::Failed;
+}
+
+fn write_header() {
+    file_write("results.txt", "Data Processing Results\n");
+    file_append("results.txt", "=======================\n");
+    file_append("results.txt", "\n");
+}
+
+fn process_and_log(input: int, index: int) {
+    let result = process_value(input);
+    let status = classify_result(result);
+    
+    // Log based on status
+    match status {
+        ProcessStatus::Success => {
+            file_append("results.txt", "Item ");
+            // Note: Can't format numbers directly, using workaround
+            if index == 1 {
+                file_append("results.txt", "1: SUCCESS (");
+            }
+            if index == 2 {
+                file_append("results.txt", "2: SUCCESS (");
+            }
+            if index == 3 {
+                file_append("results.txt", "3: SUCCESS (");
+            }
+            if index == 4 {
+                file_append("results.txt", "4: SUCCESS (");
+            }
+            if index == 5 {
+                file_append("results.txt", "5: SUCCESS (");
+            }
+            file_append("results.txt", "result < 100)\n");
+        },
+        ProcessStatus::Skipped => {
+            file_append("results.txt", "Item ");
+            if index == 1 {
+                file_append("results.txt", "1: SKIPPED (");
+            }
+            if index == 2 {
+                file_append("results.txt", "2: SKIPPED (");
+            }
+            if index == 3 {
+                file_append("results.txt", "3: SKIPPED (");
+            }
+            if index == 4 {
+                file_append("results.txt", "4: SKIPPED (");
+            }
+            if index == 5 {
+                file_append("results.txt", "5: SKIPPED (");
+            }
+            file_append("results.txt", "result >= 100)\n");
+        },
+        ProcessStatus::Failed => {
+            file_append("results.txt", "Item ");
+            if index == 1 {
+                file_append("results.txt", "1: FAILED (");
+            }
+            if index == 2 {
+                file_append("results.txt", "2: FAILED (");
+            }
+            if index == 3 {
+                file_append("results.txt", "3: FAILED (");
+            }
+            if index == 4 {
+                file_append("results.txt", "4: FAILED (");
+            }
+            if index == 5 {
+                file_append("results.txt", "5: FAILED (");
+            }
+            file_append("results.txt", "result >= 1000)\n");
+        },
+    }
+}
+
+fn write_summary(total: int, success: int, skipped: int, failed: int) {
+    file_append("results.txt", "\n");
+    file_append("results.txt", "Summary:\n");
+    file_append("results.txt", "--------\n");
+    file_append("results.txt", "Total items: 5\n");
+    file_append("results.txt", "Success: ");
+    
+    // Write success count
+    if success == 0 {
+        file_append("results.txt", "0\n");
+    }
+    if success == 1 {
+        file_append("results.txt", "1\n");
+    }
+    if success == 2 {
+        file_append("results.txt", "2\n");
+    }
+    if success == 3 {
+        file_append("results.txt", "3\n");
+    }
+    if success == 4 {
+        file_append("results.txt", "4\n");
+    }
+    if success == 5 {
+        file_append("results.txt", "5\n");
+    }
+}
+
+fn main() {
+    print("╔════════════════════════════════════╗");
+    print("║   Data Processor with File I/O     ║");
+    print("╚════════════════════════════════════╝");
+    print("");
+    
+    // Initialize output file
+    write_header();
+    print("Output file initialized");
+    
+    // Process data points
+    print("");
+    print("Processing data points...");
+    
+    let data1 = 5;   // 5^2 = 25 (Success)
+    let data2 = 8;   // 8^2 = 64 (Success)
+    let data3 = 12;  // 12^2 = 144 (Skipped)
+    let data4 = 35;  // 35^2 = 1225 (Failed)
+    let data5 = 7;   // 7^2 = 49 (Success)
+    
+    process_and_log(data1, 1);
+    print("  Processed item 1");
+    
+    process_and_log(data2, 2);
+    print("  Processed item 2");
+    
+    process_and_log(data3, 3);
+    print("  Processed item 3");
+    
+    process_and_log(data4, 4);
+    print("  Processed item 4");
+    
+    process_and_log(data5, 5);
+    print("  Processed item 5");
+    
+    // Write summary
+    let success_count = 3;
+    let skipped_count = 1;
+    let failed_count = 1;
+    
+    write_summary(5, success_count, skipped_count, failed_count);
+    print("");
+    print("Summary written to file");
+    
+    print("");
+    print("╔════════════════════════════════════╗");
+    print("║   Processing Complete!             ║");
+    print("╚════════════════════════════════════╝");
+    print("");
+    print("Check results.txt for detailed output");
+}

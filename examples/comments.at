@@ -1,0 +1,25 @@
+// This is a single-line comment at the top
+
+/* This is a multi-line comment
+   that spans multiple lines
+   and describes the program */
+
+fn factorial(n: int) -> int {
+    // Base case for recursion
+    if n <= 1 {
+        return 1; // Return 1 for base case
+    }
+    
+    /* Recursive case:
+       multiply n by factorial of n-1 */
+    return n * factorial(n - 1);
+}
+
+fn main() {
+    // Calculate factorial of 5
+    let result = factorial(5);
+    
+    print(result); // Should print 120
+    
+    /* End of main function */
+}

@@ -1,0 +1,15 @@
+// Test for loops
+
+fn main() {
+    // Simple for loop
+    for i in 0..5 {
+        print("i = {}", i);
+    }
+    
+    // Nested for loop
+    for x in 0..3 {
+        for y in 0..3 {
+            print("x={}, y={}", x, y);
+        }
+    }
+}

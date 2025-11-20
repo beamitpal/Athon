@@ -1,0 +1,62 @@
+// Simple File I/O test
+
+fn main() {
+    print("=== File I/O Test ===");
+    print("");
+    
+    // Test 1: Write a file
+    print("1. Writing to file...");
+    let write_result = file_write("hello.txt", "Hello, Athon!");
+    
+    if write_result == 1 {
+        print("   Success!");
+    } else {
+        print("   Failed!");
+    }
+    
+    // Test 2: Check if file exists
+    print("");
+    print("2. Checking if file exists...");
+    let exists = file_exists("hello.txt");
+    
+    if exists == 1 {
+        print("   File exists!");
+    } else {
+        print("   File not found!");
+    }
+    
+    // Test 3: Append to file
+    print("");
+    print("3. Appending to file...");
+    let append_result = file_append("hello.txt", "\nSecond line!");
+    
+    if append_result == 1 {
+        print("   Appended successfully!");
+    } else {
+        print("   Append failed!");
+    }
+    
+    // Test 4: Write numbers to file
+    print("");
+    print("4. Writing numbers to file...");
+    file_write("numbers.txt", "1\n2\n3\n4\n5\n");
+    print("   Numbers written!");
+    
+    // Test 5: Check non-existent file
+    print("");
+    print("5. Checking non-existent file...");
+    let not_exists = file_exists("nonexistent.txt");
+    
+    if not_exists == 0 {
+        print("   Correctly reports file does not exist!");
+    } else {
+        print("   Error: file should not exist!");
+    }
+    
+    print("");
+    print("=== All tests completed! ===");
+    print("");
+    print("Check the following files:");
+    print("  - hello.txt");
+    print("  - numbers.txt");
+}

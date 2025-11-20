@@ -1,0 +1,53 @@
+{
+  "name": "athon-language",
+  "displayName": "Athōn Language Support",
+  "description": "Syntax highlighting and language support for Athōn programming language",
+  "version": "0.3.0",
+  "publisher": "athon-lang",
+  "engines": {
+    "vscode": "^1.60.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "keywords": [
+    "athon",
+    "systems programming",
+    "capability-secure",
+    "compiler",
+    "bootstrap"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "athon",
+        "aliases": [
+          "Athōn",
+          "athon"
+        ],
+        "extensions": [
+          ".at"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "athon",
+        "scopeName": "source.athon",
+        "path": "./syntaxes/athon.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "athon",
+        "path": "./snippets/athon.json"
+      }
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/beamitpal/athon"
+  },
+  "license": "SEE LICENSE IN LICENSE"
+}

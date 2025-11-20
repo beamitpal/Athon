@@ -1,0 +1,7 @@
+// Test error messages
+// This file has intentional errors to test error reporting
+
+fn main() {
+    let x = 10
+    // Missing semicolon above - should show line 5
+}

@@ -1,0 +1,14 @@
+// Test proper string type handling
+
+fn main() {
+    // String variables should be const char*
+    let msg = "Hello, Athon!";
+    let name = "World";
+    
+    print("Message: {}", msg);
+    print("Name: {}", name);
+    
+    // String length
+    let len = length(msg);
+    print("Length: {}", len);
+}

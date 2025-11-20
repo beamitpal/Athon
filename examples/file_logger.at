@@ -1,0 +1,100 @@
+// File-based logging system
+
+enum LogLevel {
+    Info,
+    Warning,
+    Error,
+}
+
+fn log_message(level: int, message: string) {
+    let log_file = "application.log";
+    
+    // Create log entry based on level
+    match level {
+        LogLevel::Info => file_append(log_file, "[INFO] "),
+        LogLevel::Warning => file_append(log_file, "[WARNING] "),
+        LogLevel::Error => file_append(log_file, "[ERROR] "),
+    }
+    
+    // Append the message
+    file_append(log_file, message);
+    file_append(log_file, "\n");
+}
+
+fn initialize_log() {
+    // Clear previous log or create new one
+    file_write("application.log", "=== Application Log ===\n");
+    print("Log file initialized");
+}
+
+fn simulate_application() {
+    print("");
+    print("=== Simulating Application ===");
+    
+    log_message(LogLevel::Info, "Application started");
+    print("Logged: Application started");
+    
+    log_message(LogLevel::Info, "Loading configuration...");
+    print("Logged: Loading configuration");
+    
+    log_message(LogLevel::Warning, "Config file not found, using defaults");
+    print("Logged: Warning about config");
+    
+    log_message(LogLevel::Info, "Initializing modules...");
+    print("Logged: Initializing modules");
+    
+    // Simulate some processing
+    for i in 1..4 {
+        if i == 1 {
+            log_message(LogLevel::Info, "Processing item 1");
+        }
+        if i == 2 {
+            log_message(LogLevel::Info, "Processing item 2");
+        }
+        if i == 3 {
+            log_message(LogLevel::Error, "Failed to process item 3");
+        }
+    }
+    print("Logged: Processing items");
+    
+    log_message(LogLevel::Warning, "Some operations failed");
+    print("Logged: Operations warning");
+    
+    log_message(LogLevel::Info, "Application shutting down");
+    print("Logged: Shutdown message");
+}
+
+fn save_statistics() {
+    print("");
+    print("=== Saving Statistics ===");
+    
+    file_write("stats.txt", "Application Statistics\n");
+    file_append("stats.txt", "======================\n");
+    file_append("stats.txt", "\n");
+    file_append("stats.txt", "Total runs: 1\n");
+    file_append("stats.txt", "Errors: 1\n");
+    file_append("stats.txt", "Warnings: 2\n");
+    file_append("stats.txt", "Info messages: 5\n");
+    
+    print("Statistics saved to stats.txt");
+}
+
+fn main() {
+    print("╔════════════════════════════════════╗");
+    print("║     File Logger Demo               ║");
+    print("╚════════════════════════════════════╝");
+    print("");
+    
+    initialize_log();
+    simulate_application();
+    save_statistics();
+    
+    print("");
+    print("╔════════════════════════════════════╗");
+    print("║     Demo Complete!                 ║");
+    print("╚════════════════════════════════════╝");
+    print("");
+    print("Check these files:");
+    print("  - application.log (detailed log)");
+    print("  - stats.txt (statistics)");
+}

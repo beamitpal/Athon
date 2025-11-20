@@ -1,0 +1,103 @@
+// File I/O test
+
+fn test_file_write() {
+    print("=== Testing file_write ===");
+    
+    let result = file_write("test_output.txt", "Hello from Athon!");
+    
+    if result == 1 {
+        print("File written successfully");
+    } else {
+        print("Failed to write file");
+    }
+}
+
+fn test_file_exists() {
+    print("");
+    print("=== Testing file_exists ===");
+    
+    if file_exists("test_output.txt") == 1 {
+        print("File exists: test_output.txt");
+    } else {
+        print("File does not exist: test_output.txt");
+    }
+    
+    if file_exists("nonexistent.txt") == 0 {
+        print("File does not exist: nonexistent.txt (as expected)");
+    }
+}
+
+fn test_file_read() {
+    print("");
+    print("=== Testing file_read ===");
+    
+    let content = file_read("test_output.txt");
+    print("File content: {}", content);
+}
+
+fn test_file_append() {
+    print("");
+    print("=== Testing file_append ===");
+    
+    let result = file_append("test_output.txt", "\nAppended line!");
+    
+    if result == 1 {
+        print("Content appended successfully");
+        
+        // Read again to verify
+        let content = file_read("test_output.txt");
+        print("Updated content: {}", content);
+    } else {
+        print("Failed to append to file");
+    }
+}
+
+fn test_multiple_writes() {
+    print("");
+    print("=== Testing multiple writes ===");
+    
+    file_write("numbers.txt", "Numbers:\n");
+    
+    for i in 1..6 {
+        // Note: We can't format numbers in append yet, so we'll use a workaround
+        if i == 1 {
+            file_append("numbers.txt", "1\n");
+        }
+        if i == 2 {
+            file_append("numbers.txt", "2\n");
+        }
+        if i == 3 {
+            file_append("numbers.txt", "3\n");
+        }
+        if i == 4 {
+            file_append("numbers.txt", "4\n");
+        }
+        if i == 5 {
+            file_append("numbers.txt", "5\n");
+        }
+    }
+    
+    print("Written numbers to file");
+    let content = file_read("numbers.txt");
+    print("Content:\n{}", content);
+}
+
+fn main() {
+    print("╔════════════════════════════════════╗");
+    print("║      File I/O Test Suite           ║");
+    print("╚════════════════════════════════════╝");
+    print("");
+    
+    test_file_write();
+    test_file_exists();
+    test_file_read();
+    test_file_append();
+    test_multiple_writes();
+    
+    print("");
+    print("╔════════════════════════════════════╗");
+    print("║      All tests completed!          ║");
+    print("╚════════════════════════════════════╝");
+    print("");
+    print("Note: Check test_output.txt and numbers.txt");
+}

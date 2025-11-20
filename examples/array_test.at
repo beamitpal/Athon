@@ -1,0 +1,14 @@
+// Test array improvements
+
+fn main() {
+    let numbers = [10, 20, 30, 40, 50];
+    
+    // Get array length
+    let len = array_length(numbers);
+    print("Array length: {}", len);
+    
+    // Iterate using length
+    for i in 0..len {
+        print("numbers[{}] = {}", i, numbers[i]);
+    }
+}

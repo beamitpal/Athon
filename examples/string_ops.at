@@ -1,0 +1,12 @@
+// Test string operations
+
+fn main() {
+    // String length
+    let msg = "Hello";
+    let len = length(msg);
+    print("Length: {}", len);
+    
+    // Works with variables
+    let greeting = "Athon";
+    print("Greeting length: {}", length(greeting));
+}

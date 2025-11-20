@@ -1,0 +1,99 @@
+// Comprehensive pattern matching example
+
+enum Result {
+    Success,
+    Failure,
+    Pending,
+}
+
+enum Direction {
+    North,
+    South,
+    East,
+    West,
+}
+
+fn describe_result(r: int) -> int {
+    let result = 0;
+    match r {
+        Result::Success => {
+            print("Operation succeeded");
+            result = 1;
+        },
+        Result::Failure => {
+            print("Operation failed");
+            result = 0;
+        },
+        Result::Pending => {
+            print("Operation pending");
+            result = 2;
+        },
+    }
+    return result;
+}
+
+fn get_direction_name(d: int) -> int {
+    match d {
+        Direction::North => print("Going North"),
+        Direction::South => print("Going South"),
+        Direction::East => print("Going East"),
+        Direction::West => print("Going West"),
+    }
+    return 0;
+}
+
+fn classify_number(n: int) {
+    match n {
+        0 => print("Zero"),
+        1 => print("One"),
+        2 => print("Two"),
+        3 => print("Three"),
+        _ => print("Other"),
+    }
+}
+
+fn is_even(n: int) -> int {
+    let remainder = n - (n / 2) * 2;
+    let result = 0;
+    match remainder {
+        0 => result = 1,
+        _ => result = 0,
+    }
+    return result;
+}
+
+fn main() {
+    print("=== Result Matching ===");
+    let r1 = Result::Success;
+    let code1 = describe_result(r1);
+    print("Return code: {}", code1);
+    
+    print("");
+    let r2 = Result::Failure;
+    let code2 = describe_result(r2);
+    print("Return code: {}", code2);
+    
+    print("");
+    print("=== Direction Matching ===");
+    let d1 = Direction::North;
+    get_direction_name(d1);
+    
+    let d2 = Direction::East;
+    get_direction_name(d2);
+    
+    print("");
+    print("=== Number Classification ===");
+    for i in 0..6 {
+        classify_number(i);
+    }
+    
+    print("");
+    print("=== Even/Odd Test ===");
+    for i in 0..10 {
+        if is_even(i) == 1 {
+            print("{} is even", i);
+        } else {
+            print("{} is odd", i);
+        }
+    }
+}

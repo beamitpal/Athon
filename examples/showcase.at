@@ -1,0 +1,202 @@
+// Athōn Language Showcase
+// Demonstrates all major features: structs, enums, pattern matching, math, functions, loops
+
+enum Status {
+    Active,
+    Inactive,
+    Pending,
+}
+
+struct Player {
+    health: int,
+    score: int,
+    level: int,
+}
+
+struct Enemy {
+    health: int,
+    damage: int,
+}
+
+fn create_player_health() -> int {
+    return 100;
+}
+
+fn create_player_score() -> int {
+    return 0;
+}
+
+fn create_player_level() -> int {
+    return 1;
+}
+
+fn create_enemy_health(level: int) -> int {
+    let base_health = 50;
+    return base_health + level * 10;
+}
+
+fn create_enemy_damage(level: int) -> int {
+    let base_damage = 10;
+    return base_damage + level * 2;
+}
+
+fn attack(attacker_damage: int, defender_health: int) -> int {
+    return max(0, defender_health - attacker_damage);
+}
+
+fn calculate_score(base_score: int, multiplier: int) -> int {
+    return base_score * multiplier;
+}
+
+fn get_status_message(status: int) {
+    match status {
+        Status::Active => print("Player is active and ready!"),
+        Status::Inactive => print("Player is inactive"),
+        Status::Pending => print("Player status pending..."),
+    }
+}
+
+fn level_up_player(player: Player) {
+    let new_level = player.level + 1;
+    let health_bonus = 20;
+    let new_health = min(200, player.health + health_bonus);
+    
+    print("Player levels up!");
+    print("  New Level: {}", new_level);
+    print("  New Health: {}", new_health);
+}
+
+fn simulate_battle(player: Player, enemy: Enemy) {
+    print("=== Battle Simulation ===");
+    print("Player: Health={}, Level={}", player.health, player.level);
+    print("Enemy: Health={}, Damage={}", enemy.health, enemy.damage);
+    
+    let player_hp = player.health;
+    let enemy_hp = enemy.health;
+    let player_damage = 15 + player.level * 5;
+    
+    let rounds = 0;
+    let max_rounds = 10;
+    
+    for i in 0..max_rounds {
+        rounds = i + 1;
+        
+        // Player attacks
+        let new_enemy_hp = attack(player_damage, enemy_hp);
+        print("Round {}: Player deals {} damage", rounds, player_damage);
+        
+        if new_enemy_hp == 0 {
+            print("Victory! Enemy defeated in {} rounds!", rounds);
+            return;
+        }
+        
+        enemy_hp = new_enemy_hp;
+        
+        // Enemy attacks
+        let new_player_hp = attack(enemy.damage, player_hp);
+        print("Round {}: Enemy deals {} damage", rounds, enemy.damage);
+        
+        if new_player_hp == 0 {
+            print("Defeat! Player was defeated in {} rounds", rounds);
+            return;
+        }
+        
+        player_hp = new_player_hp;
+        print("Status: Player HP={}, Enemy HP={}", player_hp, enemy_hp);
+        print("");
+    }
+    
+    print("Battle ended in a draw after {} rounds", max_rounds);
+}
+
+fn calculate_stats() {
+    print("=== Statistics ===");
+    
+    // Calculate some game statistics
+    let base_xp = 100;
+    let levels = 5;
+    
+    print("Experience required per level:");
+    for i in 1..levels {
+        let xp_needed = base_xp * pow(2, i - 1);
+        print("  Level {}: {} XP", i, xp_needed);
+    }
+    
+    print("");
+    print("Damage scaling:");
+    for i in 1..levels {
+        let damage = 10 + i * 5;
+        let crit_damage = damage * 2;
+        print("  Level {}: Normal={}, Critical={}", i, damage, crit_damage);
+    }
+}
+
+fn test_math_functions() {
+    print("");
+    print("=== Math Functions Test ===");
+    
+    let a = 15;
+    let b = 7;
+    
+    print("a = {}, b = {}", a, b);
+    print("abs(a - b) = {}", abs(a - b));
+    print("min(a, b) = {}", min(a, b));
+    print("max(a, b) = {}", max(a, b));
+    print("pow(2, 4) = {}", pow(2, 4));
+    print("sqrt(64) = {}", sqrt(64));
+    print("mod(a, b) = {}", mod(a, b));
+}
+
+fn main() {
+    print("╔════════════════════════════════════╗");
+    print("║   Athōn Language Showcase Demo    ║");
+    print("╚════════════════════════════════════╝");
+    print("");
+    
+    // Create player
+    let player = Player { 
+        health: create_player_health(), 
+        score: create_player_score(), 
+        level: create_player_level() 
+    };
+    print("Created new player:");
+    print("  Health: {}", player.health);
+    print("  Score: {}", player.score);
+    print("  Level: {}", player.level);
+    
+    // Check status
+    print("");
+    get_status_message(Status::Active);
+    
+    // Level up
+    print("");
+    level_up_player(player);
+    
+    // Calculate score
+    print("");
+    let base_score = 100;
+    let multiplier = player.level + 1;
+    let final_score = calculate_score(base_score, multiplier);
+    print("Score calculation: {} x {} = {}", base_score, multiplier, final_score);
+    
+    // Math functions
+    test_math_functions();
+    
+    // Statistics
+    print("");
+    calculate_stats();
+    
+    // Battle simulation
+    print("");
+    let enemy_level = player.level + 1;
+    let enemy = Enemy { 
+        health: create_enemy_health(enemy_level), 
+        damage: create_enemy_damage(enemy_level) 
+    };
+    simulate_battle(player, enemy);
+    
+    print("");
+    print("╔════════════════════════════════════╗");
+    print("║      Demo Complete! Thanks!        ║");
+    print("╚════════════════════════════════════╝");
+}

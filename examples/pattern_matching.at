@@ -1,0 +1,96 @@
+// Test pattern matching feature
+
+enum Color {
+    Red,
+    Green,
+    Blue,
+}
+
+enum Status {
+    Ok,
+    Error,
+    Pending,
+}
+
+fn test_color(c: int) {
+    match c {
+        Color::Red => print("Color is Red!"),
+        Color::Green => print("Color is Green!"),
+        Color::Blue => print("Color is Blue!"),
+    }
+}
+
+fn test_status(s: int) {
+    match s {
+        Status::Ok => {
+            print("Status: OK");
+            print("Everything is fine");
+        },
+        Status::Error => {
+            print("Status: ERROR");
+            print("Something went wrong");
+        },
+        Status::Pending => print("Status: PENDING"),
+    }
+}
+
+fn test_numbers(n: int) {
+    match n {
+        0 => print("Zero"),
+        1 => print("One"),
+        2 => print("Two"),
+        _ => print("Other number"),
+    }
+}
+
+fn test_booleans(b: int) {
+    match b {
+        true => print("True value"),
+        false => print("False value"),
+    }
+}
+
+fn main() {
+    print("=== Testing Color Matching ===");
+    let red = Color::Red;
+    test_color(red);
+    
+    let green = Color::Green;
+    test_color(green);
+    
+    let blue = Color::Blue;
+    test_color(blue);
+    
+    print("");
+    print("=== Testing Status Matching ===");
+    let ok = Status::Ok;
+    test_status(ok);
+    
+    print("");
+    let err = Status::Error;
+    test_status(err);
+    
+    print("");
+    let pending = Status::Pending;
+    test_status(pending);
+    
+    print("");
+    print("=== Testing Number Matching ===");
+    test_numbers(0);
+    test_numbers(1);
+    test_numbers(2);
+    test_numbers(42);
+    
+    print("");
+    print("=== Testing Boolean Matching ===");
+    test_booleans(1);
+    test_booleans(0);
+    
+    print("");
+    print("=== Direct Match Test ===");
+    let x = 5;
+    match x {
+        5 => print("x is 5!"),
+        _ => print("x is not 5"),
+    }
+}

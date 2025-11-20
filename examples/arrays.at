@@ -1,0 +1,16 @@
+// Test arrays
+
+fn main() {
+    // Array literal
+    let numbers = [1, 2, 3, 4, 5];
+    
+    // Array indexing
+    let first = numbers[0];
+    let last = numbers[4];
+    
+    print("First: {}, Last: {}", first, last);
+    
+    // Modify array
+    let arr = [10, 20, 30];
+    print("arr[1] = {}", arr[1]);
+}

@@ -1,0 +1,172 @@
+// Geometry calculator using math library
+
+struct Point {
+    x: int,
+    y: int,
+}
+
+struct Rectangle {
+    width: int,
+    height: int,
+}
+
+struct Circle {
+    radius: int,
+}
+
+enum Shape {
+    Rect,
+    Circ,
+    Tri,
+}
+
+fn distance(p1: Point, p2: Point) -> int {
+    let dx = abs(p2.x - p1.x);
+    let dy = abs(p2.y - p1.y);
+    let dist_sq = dx * dx + dy * dy;
+    return sqrt(dist_sq);
+}
+
+fn rectangle_area(r: Rectangle) -> int {
+    return r.width * r.height;
+}
+
+fn rectangle_perimeter(r: Rectangle) -> int {
+    return 2 * (r.width + r.height);
+}
+
+fn circle_area_approx(c: Circle) -> int {
+    // Using pi ≈ 3 for integer math
+    return 3 * c.radius * c.radius;
+}
+
+fn circle_circumference_approx(c: Circle) -> int {
+    // Using pi ≈ 3 for integer math
+    return 2 * 3 * c.radius;
+}
+
+fn triangle_area(base: int, height: int) -> int {
+    return (base * height) / 2;
+}
+
+fn describe_shape(shape: int) {
+    match shape {
+        Shape::Rect => print("Rectangle: 4 sides, 4 right angles"),
+        Shape::Circ => print("Circle: Infinite sides, no angles"),
+        Shape::Tri => print("Triangle: 3 sides, 3 angles"),
+    }
+}
+
+fn is_pythagorean_triple(a: int, b: int, c: int) -> int {
+    let a_sq = a * a;
+    let b_sq = b * b;
+    let c_sq = c * c;
+    
+    if a_sq + b_sq == c_sq {
+        return 1;
+    }
+    return 0;
+}
+
+fn main() {
+    print("=== Geometry Calculator ===");
+    print("");
+    
+    // Test points and distance
+    print("--- Points and Distance ---");
+    let p1 = Point { x: 0, y: 0 };
+    let p2 = Point { x: 3, y: 4 };
+    let p3 = Point { x: 6, y: 8 };
+    
+    let d12 = distance(p1, p2);
+    let d23 = distance(p2, p3);
+    let d13 = distance(p1, p3);
+    
+    print("Point 1: ({}, {})", p1.x, p1.y);
+    print("Point 2: ({}, {})", p2.x, p2.y);
+    print("Point 3: ({}, {})", p3.x, p3.y);
+    print("Distance P1-P2: {}", d12);
+    print("Distance P2-P3: {}", d23);
+    print("Distance P1-P3: {}", d13);
+    
+    // Test rectangles
+    print("");
+    print("--- Rectangles ---");
+    let rect1 = Rectangle { width: 5, height: 10 };
+    let rect2 = Rectangle { width: 8, height: 8 };
+    
+    print("Rectangle 1: {}x{}", rect1.width, rect1.height);
+    print("  Area: {}", rectangle_area(rect1));
+    print("  Perimeter: {}", rectangle_perimeter(rect1));
+    
+    print("Rectangle 2: {}x{}", rect2.width, rect2.height);
+    print("  Area: {}", rectangle_area(rect2));
+    print("  Perimeter: {}", rectangle_perimeter(rect2));
+    
+    // Test circles
+    print("");
+    print("--- Circles ---");
+    let circ1 = Circle { radius: 5 };
+    let circ2 = Circle { radius: 10 };
+    
+    print("Circle 1: radius {}", circ1.radius);
+    print("  Area (approx): {}", circle_area_approx(circ1));
+    print("  Circumference (approx): {}", circle_circumference_approx(circ1));
+    
+    print("Circle 2: radius {}", circ2.radius);
+    print("  Area (approx): {}", circle_area_approx(circ2));
+    print("  Circumference (approx): {}", circle_circumference_approx(circ2));
+    
+    // Test triangles
+    print("");
+    print("--- Triangles ---");
+    let tri_area1 = triangle_area(10, 5);
+    let tri_area2 = triangle_area(6, 8);
+    
+    print("Triangle with base=10, height=5: area = {}", tri_area1);
+    print("Triangle with base=6, height=8: area = {}", tri_area2);
+    
+    // Test shape descriptions
+    print("");
+    print("--- Shape Descriptions ---");
+    describe_shape(Shape::Rect);
+    describe_shape(Shape::Circ);
+    describe_shape(Shape::Tri);
+    
+    // Test Pythagorean triples
+    print("");
+    print("--- Pythagorean Triples ---");
+    let triples = 5;
+    for i in 0..triples {
+        match i {
+            0 => {
+                if is_pythagorean_triple(3, 4, 5) == 1 {
+                    print("(3, 4, 5) is a Pythagorean triple!");
+                }
+            },
+            1 => {
+                if is_pythagorean_triple(5, 12, 13) == 1 {
+                    print("(5, 12, 13) is a Pythagorean triple!");
+                }
+            },
+            2 => {
+                if is_pythagorean_triple(8, 15, 17) == 1 {
+                    print("(8, 15, 17) is a Pythagorean triple!");
+                }
+            },
+            3 => {
+                if is_pythagorean_triple(7, 24, 25) == 1 {
+                    print("(7, 24, 25) is a Pythagorean triple!");
+                }
+            },
+            4 => {
+                if is_pythagorean_triple(1, 2, 3) == 0 {
+                    print("(1, 2, 3) is NOT a Pythagorean triple");
+                }
+            },
+        }
+    }
+    
+    print("");
+    print("=== Geometry calculations complete! ===");
+}

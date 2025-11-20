@@ -1,0 +1,15 @@
+module example
+
+fn @add(%a: i32, %b: i32) -> i32 {
+entry:
+    %res = add i32 %a, %b
+    ret i32 %res
+}
+
+fn @main() -> void {
+entry:
+    %1 = const i32 10
+    %2 = const i32 20
+    %3 = call @add(%1, %2)
+    ret void
+}

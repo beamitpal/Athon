@@ -1,0 +1,179 @@
+# Athōn Language - Git Ignore File
+
+# Compiled binaries
+athon-boot
+*.out
+*.exe
+*.o
+*.so
+*.dylib
+*.dll
+
+# Generated C code from compilation
+*.c
+!compiler/**/*.c
+!examples/**/*.c
+
+# Test outputs
+test
+test_*
+/tmp/test
+/tmp/test.c
+
+# Build artifacts
+target/
+build/
+dist/
+*.rlib
+*.pdb
+
+# Rust build artifacts
+Cargo.lock
+**/*.rs.bk
+*.orig
+
+# Editor and IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.sublime-*
+.project
+.classpath
+.settings/
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+*.bak
+*.cache
+
+# Output files from examples
+hello
+hello.txt
+output.txt
+test_output.txt
+numbers.txt
+application.log
+stats.txt
+results.txt
+data.txt
+config.txt
+game.log
+*.at.c
+
+# OS specific
+Thumbs.db
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Linux
+*~
+.directory
+.Trash-*
+
+# Windows
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+.Spotlight-V100
+.Trashes
+
+# Documentation build artifacts
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+
+# Package manager directories
+node_modules/
+bower_components/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+
+# Coverage reports
+*.gcov
+*.gcda
+*.gcno
+coverage/
+htmlcov/
+
+# Profiling
+*.prof
+*.pprof
+
+# Debugging
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Tags
+tags
+TAGS
+.tags
+.TAGS
+
+# Backup files
+*.backup
+*.old
+
+# Local configuration
+.env
+.env.local
+local.properties
+
+# Test artifacts
+test-results/
+test-output/
+*.test
+
+# Benchmark results
+bench-results/
+*.bench
+
+# Documentation generation
+docs/_build/
+docs/.doctrees/
+
+# Keep these files
+!.gitignore
+!.gitattributes
+!LICENSE
+!README.md
+!CONTRIBUTING.md
+
+# Keep example .at files
+!examples/*.at
+!test-athon-compiler/*.at
+
+# Keep documentation
+!docs/**/*.md
+!athon-spec/**/*.md
+!std/**/*.md
+!compiler/**/*.md
+
+# Keep CI scripts
+!ci/*.sh
+
+# Keep build scripts
+!compiler/bootstrap/build.sh

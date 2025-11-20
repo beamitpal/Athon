@@ -1,0 +1,27 @@
+// Test enum feature
+
+enum Color {
+    Red,
+    Green,
+    Blue,
+}
+
+enum Status {
+    Ok,
+    Error,
+}
+
+fn main() {
+    // Create enum values
+    let c = Color::Red;
+    let s = Status::Ok;
+    
+    // Compare with variants
+    if c == Color::Red {
+        print("It's red!");
+    }
+    
+    if s == Status::Ok {
+        print("Status is OK");
+    }
+}
