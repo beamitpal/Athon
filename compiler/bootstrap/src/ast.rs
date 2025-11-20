@@ -76,8 +76,14 @@ pub struct MatchArm {
 
 #[derive(Debug)]
 pub enum Statement {
-    Let { name: String, value: Expr },
-    Assign { name: String, value: Expr },
+    Let {
+        name: String,
+        value: Expr,
+    },
+    Assign {
+        name: String,
+        value: Expr,
+    },
     If {
         condition: Expr,
         then_block: Vec<Statement>,
@@ -97,7 +103,9 @@ pub enum Statement {
         value: Expr,
         arms: Vec<MatchArm>,
     },
-    Return { value: Option<Expr> },
+    Return {
+        value: Option<Expr>,
+    },
     Expr(Expr),
 }
 

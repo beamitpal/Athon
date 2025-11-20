@@ -129,7 +129,6 @@ See [Examples Index](docs/examples-index.md) for complete catalog with learning 
 ### For Contributors
 - **[Contributing Guide](CONTRIBUTING.md)** - How to contribute
 - **[Project Status](PROJECT_STATUS.md)** - Current state and metrics
-- **[Task Tracker](task.md)** - Open tasks and roadmap
 - **[Changelog](CHANGELOG.md)** - Version history
 
 ### Technical Documentation

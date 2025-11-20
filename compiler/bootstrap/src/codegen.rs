@@ -10,7 +10,7 @@ pub fn emit_c(program: &Program) {
     println!("#include <string.h>");
     println!("#include <stdlib.h>");
     println!();
-    
+
     // Emit math helper functions
     println!("// Math helper functions");
     println!("int __athon_pow(int base, int exp) {{");
@@ -34,7 +34,7 @@ pub fn emit_c(program: &Program) {
     println!("    return result;");
     println!("}}");
     println!();
-    
+
     // Emit file I/O helper functions
     println!("// File I/O helper functions");
     println!("char* __athon_file_read(const char* filename) {{");
@@ -120,7 +120,9 @@ pub fn emit_c(program: &Program) {
 }
 
 fn emit_function(func: &Function) {
-    let return_type = func.return_type.as_ref().map(|t| t.as_str()).unwrap_or("void");
+    let return_type = func
+        .return_type.as_deref()
+        .unwrap_or("void");
     let c_return_type = match return_type {
         "int" => "int".to_string(),
         "bool" => "int".to_string(),
@@ -324,7 +326,10 @@ fn emit_statement(stmt: &Statement, indent: usize) {
                             emit_statement(stmt, indent + 2);
                         }
                     }
-                    Pattern::EnumVariant { enum_name: _, variant } => {
+                    Pattern::EnumVariant {
+                        enum_name: _,
+                        variant,
+                    } => {
                         if first {
                             print!("{}    if (__match_val == {}) {{", ind, variant);
                             first = false;
@@ -368,15 +373,15 @@ fn emit_statement(stmt: &Statement, indent: usize) {
                             // For now, we'll use %s for strings and %d for numbers
                             // This is a simplification - proper implementation would need type inference
                             let mut c_format = format_str.clone();
-                            
+
                             // Count placeholders
                             let placeholder_count = format_str.matches("{}").count();
-                            
+
                             // Replace with %d by default (could be improved with type checking)
                             c_format = c_format.replace("{}", "%d");
-                            
+
                             print!("printf(\"{}\"", c_format);
-                            
+
                             // Emit remaining arguments
                             for arg in &args[1..] {
                                 print!(", ");
@@ -420,7 +425,10 @@ fn emit_expr(expr: &Expr) {
             emit_expr(index);
             print!("]");
         }
-        Expr::StructLiteral { struct_name, fields } => {
+        Expr::StructLiteral {
+            struct_name,
+            fields,
+        } => {
             print!("(struct {}) {{", struct_name);
             for (i, (field_name, value)) in fields.iter().enumerate() {
                 if i > 0 {
@@ -435,7 +443,10 @@ fn emit_expr(expr: &Expr) {
             emit_expr(object);
             print!(".{}", member);
         }
-        Expr::EnumVariant { enum_name: _, variant } => {
+        Expr::EnumVariant {
+            enum_name: _,
+            variant,
+        } => {
             // In C, just use the variant name
             print!("{}", variant);
         }
@@ -518,7 +529,7 @@ fn emit_expr(expr: &Expr) {
                     // In real implementation, we'd generate a helper function
                     print!("/* substring not fully implemented */");
                     print!("(");
-                    if args.len() >= 1 {
+                    if !args.is_empty() {
                         emit_expr(&args[0]);
                     }
                     print!(")");
@@ -632,4 +643,3 @@ fn emit_expr(expr: &Expr) {
         }
     }
 }
-

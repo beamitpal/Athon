@@ -1,7 +1,7 @@
 // Parser module for Athōn bootstrap compiler
 
-use crate::lexer::{Lexer, Token, TokenKind};
 use crate::ast::*;
+use crate::lexer::{Lexer, Token, TokenKind};
 use std::process;
 
 pub struct Parser {
@@ -41,19 +41,27 @@ impl Parser {
             } else if self.current.kind == TokenKind::Fn {
                 functions.push(self.parse_function());
             } else {
-                eprintln!("Error at line {}, column {}: Expected 'struct', 'enum', or 'fn'",
-                         self.current.line, self.current.column);
+                eprintln!(
+                    "Error at line {}, column {}: Expected 'struct', 'enum', or 'fn'",
+                    self.current.line, self.current.column
+                );
                 process::exit(1);
             }
         }
 
-        Program { structs, enums, functions }
+        Program {
+            structs,
+            enums,
+            functions,
+        }
     }
 
     fn parse_enum(&mut self) -> EnumDef {
         if !self.expect(TokenKind::Enum) {
-            eprintln!("Error at line {}, column {}: Expected 'enum'",
-                     self.current.line, self.current.column);
+            eprintln!(
+                "Error at line {}, column {}: Expected 'enum'",
+                self.current.line, self.current.column
+            );
             process::exit(1);
         }
 
@@ -62,14 +70,18 @@ impl Parser {
             self.advance();
             n
         } else {
-            eprintln!("Error at line {}, column {}: Expected enum name",
-                     self.current.line, self.current.column);
+            eprintln!(
+                "Error at line {}, column {}: Expected enum name",
+                self.current.line, self.current.column
+            );
             process::exit(1);
         };
 
         if !self.expect(TokenKind::LBrace) {
-            eprintln!("Error at line {}, column {}: Expected '{{'",
-                     self.current.line, self.current.column);
+            eprintln!(
+                "Error at line {}, column {}: Expected '{{'",
+                self.current.line, self.current.column
+            );
             process::exit(1);
         }
 
@@ -80,8 +92,10 @@ impl Parser {
                 self.advance();
                 n
             } else {
-                eprintln!("Error at line {}, column {}: Expected variant name",
-                         self.current.line, self.current.column);
+                eprintln!(
+                    "Error at line {}, column {}: Expected variant name",
+                    self.current.line, self.current.column
+                );
                 process::exit(1);
             };
 
@@ -93,8 +107,10 @@ impl Parser {
         }
 
         if !self.expect(TokenKind::RBrace) {
-            eprintln!("Error at line {}, column {}: Expected '}}'",
-                     self.current.line, self.current.column);
+            eprintln!(
+                "Error at line {}, column {}: Expected '}}'",
+                self.current.line, self.current.column
+            );
             process::exit(1);
         }
 
@@ -103,8 +119,10 @@ impl Parser {
 
     fn parse_struct(&mut self) -> StructDef {
         if !self.expect(TokenKind::Struct) {
-            eprintln!("Error at line {}, column {}: Expected 'struct'",
-                     self.current.line, self.current.column);
+            eprintln!(
+                "Error at line {}, column {}: Expected 'struct'",
+                self.current.line, self.current.column
+            );
             process::exit(1);
         }
 
@@ -113,14 +131,18 @@ impl Parser {
             self.advance();
             n
         } else {
-            eprintln!("Error at line {}, column {}: Expected struct name",
-                     self.current.line, self.current.column);
+            eprintln!(
+                "Error at line {}, column {}: Expected struct name",
+                self.current.line, self.current.column
+            );
             process::exit(1);
         };
 
         if !self.expect(TokenKind::LBrace) {
-            eprintln!("Error at line {}, column {}: Expected '{{'",
-                     self.current.line, self.current.column);
+            eprintln!(
+                "Error at line {}, column {}: Expected '{{'",
+                self.current.line, self.current.column
+            );
             process::exit(1);
         }
 
@@ -131,14 +153,18 @@ impl Parser {
                 self.advance();
                 n
             } else {
-                eprintln!("Error at line {}, column {}: Expected field name",
-                         self.current.line, self.current.column);
+                eprintln!(
+                    "Error at line {}, column {}: Expected field name",
+                    self.current.line, self.current.column
+                );
                 process::exit(1);
             };
 
             if !self.expect(TokenKind::Colon) {
-                eprintln!("Error at line {}, column {}: Expected ':' after field name",
-                         self.current.line, self.current.column);
+                eprintln!(
+                    "Error at line {}, column {}: Expected ':' after field name",
+                    self.current.line, self.current.column
+                );
                 process::exit(1);
             }
 
@@ -147,8 +173,10 @@ impl Parser {
                 self.advance();
                 t
             } else {
-                eprintln!("Error at line {}, column {}: Expected type",
-                         self.current.line, self.current.column);
+                eprintln!(
+                    "Error at line {}, column {}: Expected type",
+                    self.current.line, self.current.column
+                );
                 process::exit(1);
             };
 
@@ -163,8 +191,10 @@ impl Parser {
         }
 
         if !self.expect(TokenKind::RBrace) {
-            eprintln!("Error at line {}, column {}: Expected '}}'",
-                     self.current.line, self.current.column);
+            eprintln!(
+                "Error at line {}, column {}: Expected '}}'",
+                self.current.line, self.current.column
+            );
             process::exit(1);
         }
 
@@ -173,8 +203,10 @@ impl Parser {
 
     fn parse_function(&mut self) -> Function {
         if !self.expect(TokenKind::Fn) {
-            eprintln!("Error at line {}, column {}: Expected 'fn'", 
-                     self.current.line, self.current.column);
+            eprintln!(
+                "Error at line {}, column {}: Expected 'fn'",
+                self.current.line, self.current.column
+            );
             process::exit(1);
         }
 
@@ -183,8 +215,10 @@ impl Parser {
             self.advance();
             n
         } else {
-            eprintln!("Error at line {}, column {}: Expected function name",
-                     self.current.line, self.current.column);
+            eprintln!(
+                "Error at line {}, column {}: Expected function name",
+                self.current.line, self.current.column
+            );
             process::exit(1);
         };
 
@@ -220,7 +254,10 @@ impl Parser {
                     process::exit(1);
                 };
 
-                params.push(Parameter { name: param_name, type_name });
+                params.push(Parameter {
+                    name: param_name,
+                    type_name,
+                });
 
                 if !self.expect(TokenKind::Comma) {
                     break;
@@ -342,7 +379,8 @@ impl Parser {
                 }
 
                 let mut else_stmts = Vec::new();
-                while self.current.kind != TokenKind::RBrace && self.current.kind != TokenKind::EOF {
+                while self.current.kind != TokenKind::RBrace && self.current.kind != TokenKind::EOF
+                {
                     else_stmts.push(self.parse_statement());
                 }
 
@@ -439,8 +477,10 @@ impl Parser {
             let value = self.parse_expr();
 
             if !self.expect(TokenKind::LBrace) {
-                eprintln!("Error at line {}, column {}: Expected '{{' after match value",
-                         self.current.line, self.current.column);
+                eprintln!(
+                    "Error at line {}, column {}: Expected '{{' after match value",
+                    self.current.line, self.current.column
+                );
                 process::exit(1);
             }
 
@@ -450,23 +490,29 @@ impl Parser {
                 let pattern = self.parse_pattern();
 
                 if !self.expect(TokenKind::FatArrow) {
-                    eprintln!("Error at line {}, column {}: Expected '=>' after pattern",
-                             self.current.line, self.current.column);
+                    eprintln!(
+                        "Error at line {}, column {}: Expected '=>' after pattern",
+                        self.current.line, self.current.column
+                    );
                     process::exit(1);
                 }
 
                 // Parse arm body - can be a single expression or a block
                 let mut body = Vec::new();
-                
+
                 if self.current.kind == TokenKind::LBrace {
                     // Block body
                     self.advance();
-                    while self.current.kind != TokenKind::RBrace && self.current.kind != TokenKind::EOF {
+                    while self.current.kind != TokenKind::RBrace
+                        && self.current.kind != TokenKind::EOF
+                    {
                         body.push(self.parse_statement());
                     }
                     if !self.expect(TokenKind::RBrace) {
-                        eprintln!("Error at line {}, column {}: Expected '}}' after match arm block",
-                                 self.current.line, self.current.column);
+                        eprintln!(
+                            "Error at line {}, column {}: Expected '}}' after match arm block",
+                            self.current.line, self.current.column
+                        );
                         process::exit(1);
                     }
                 } else {
@@ -478,9 +524,9 @@ impl Parser {
                         let saved_line = self.lexer.line;
                         let saved_column = self.lexer.column;
                         let saved_current = self.current.clone();
-                        
+
                         self.advance();
-                        
+
                         if self.current.kind == TokenKind::Equals {
                             // It's an assignment
                             self.advance();
@@ -492,7 +538,7 @@ impl Parser {
                             self.lexer.line = saved_line;
                             self.lexer.column = saved_column;
                             self.current = saved_current;
-                            
+
                             let expr = self.parse_expr();
                             body.push(Statement::Expr(expr));
                         }
@@ -508,8 +554,10 @@ impl Parser {
                 // Require comma after arm (unless it's the last one before })
                 if self.current.kind != TokenKind::RBrace {
                     if !self.expect(TokenKind::Comma) {
-                        eprintln!("Error at line {}, column {}: Expected ',' after match arm",
-                                 self.current.line, self.current.column);
+                        eprintln!(
+                            "Error at line {}, column {}: Expected ',' after match arm",
+                            self.current.line, self.current.column
+                        );
                         process::exit(1);
                     }
                 } else {
@@ -519,8 +567,10 @@ impl Parser {
             }
 
             if !self.expect(TokenKind::RBrace) {
-                eprintln!("Error at line {}, column {}: Expected '}}' after match arms",
-                         self.current.line, self.current.column);
+                eprintln!(
+                    "Error at line {}, column {}: Expected '}}' after match arms",
+                    self.current.line, self.current.column
+                );
                 process::exit(1);
             }
 
@@ -602,14 +652,16 @@ impl Parser {
                 if self.current.kind == TokenKind::DoubleColon {
                     // Enum variant pattern: Color::Red
                     self.advance();
-                    
+
                     let variant = if self.current.kind == TokenKind::Identifier {
                         let v = self.current.text.clone();
                         self.advance();
                         v
                     } else {
-                        eprintln!("Error at line {}, column {}: Expected variant name after '::'",
-                                 self.current.line, self.current.column);
+                        eprintln!(
+                            "Error at line {}, column {}: Expected variant name after '::'",
+                            self.current.line, self.current.column
+                        );
                         process::exit(1);
                     };
 
@@ -618,14 +670,18 @@ impl Parser {
                         variant,
                     }
                 } else {
-                    eprintln!("Error at line {}, column {}: Invalid pattern, expected enum variant",
-                             self.current.line, self.current.column);
+                    eprintln!(
+                        "Error at line {}, column {}: Invalid pattern, expected enum variant",
+                        self.current.line, self.current.column
+                    );
                     process::exit(1);
                 }
             }
             _ => {
-                eprintln!("Error at line {}, column {}: Expected pattern",
-                         self.current.line, self.current.column);
+                eprintln!(
+                    "Error at line {}, column {}: Expected pattern",
+                    self.current.line, self.current.column
+                );
                 process::exit(1);
             }
         }
@@ -751,7 +807,7 @@ impl Parser {
                 operand: Box::new(operand),
             };
         }
-        
+
         if self.current.kind == TokenKind::Minus {
             self.advance();
             let operand = self.parse_unary();
@@ -791,7 +847,7 @@ impl Parser {
                 if self.current.kind == TokenKind::DoubleColon {
                     // Enum variant: Color::Red
                     self.advance();
-                    
+
                     let variant = if self.current.kind == TokenKind::Identifier {
                         let v = self.current.text.clone();
                         self.advance();
@@ -827,7 +883,7 @@ impl Parser {
                     // Array indexing
                     self.advance();
                     let index = self.parse_expr();
-                    
+
                     if !self.expect(TokenKind::RBracket) {
                         eprintln!("Expected ']' in array index");
                         process::exit(1);
@@ -842,39 +898,41 @@ impl Parser {
                     // But only if it looks like field assignments inside
                     // Check if the next token is an identifier followed by ':'
                     // to distinguish from match arms or other block constructs
-                    
+
                     // Peek ahead to see if this looks like a struct literal
                     let saved_pos = self.lexer.pos;
                     let saved_line = self.lexer.line;
                     let saved_column = self.lexer.column;
                     let saved_current = self.current.clone();
-                    
+
                     self.advance(); // consume '{'
                     let looks_like_struct = if self.current.kind == TokenKind::Identifier {
                         let saved_pos2 = self.lexer.pos;
                         let saved_line2 = self.lexer.line;
                         let saved_column2 = self.lexer.column;
                         let saved_current2 = self.current.clone();
-                        
+
                         self.advance(); // consume identifier
                         let has_colon = self.current.kind == TokenKind::Colon;
-                        
+
                         // Restore position
                         self.lexer.pos = saved_pos2;
                         self.lexer.line = saved_line2;
                         self.lexer.column = saved_column2;
                         self.current = saved_current2;
-                        
+
                         has_colon
                     } else {
                         false
                     };
-                    
+
                     if looks_like_struct {
                         // Parse as struct literal
                         let mut fields = Vec::new();
 
-                        while self.current.kind != TokenKind::RBrace && self.current.kind != TokenKind::EOF {
+                        while self.current.kind != TokenKind::RBrace
+                            && self.current.kind != TokenKind::EOF
+                        {
                             let field_name = if self.current.kind == TokenKind::Identifier {
                                 let n = self.current.text.clone();
                                 self.advance();
@@ -912,16 +970,16 @@ impl Parser {
                         self.lexer.line = saved_line;
                         self.lexer.column = saved_column;
                         self.current = saved_current;
-                        
+
                         Expr::Variable(name)
                     }
                 } else if self.current.kind == TokenKind::Dot {
                     // Member access: p.x
                     let mut expr = Expr::Variable(name);
-                    
+
                     while self.current.kind == TokenKind::Dot {
                         self.advance();
-                        
+
                         let member = if self.current.kind == TokenKind::Identifier {
                             let m = self.current.text.clone();
                             self.advance();
@@ -936,7 +994,7 @@ impl Parser {
                             member,
                         };
                     }
-                    
+
                     expr
                 } else {
                     Expr::Variable(name)
@@ -977,4 +1035,3 @@ impl Parser {
         }
     }
 }
-
