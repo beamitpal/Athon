@@ -32,33 +32,58 @@ Athōn is a sovereign, capability-secure, quantum-resistant systems programming 
 
 ## Getting Started
 
-### Prerequisites
+### 🚀 One-Command Installation
 
-- Rust compiler (for building the bootstrap compiler)
-- GCC or Clang (for compiling generated C code)
+```bash
+git clone https://github.com/yourusername/athon.git
+cd athon
+./install.sh
+```
 
-### Building the Compiler
+This installs both the compiler and the unified CLI tool.
+
+### ⚡ Quick Start with CLI
+
+The easiest way to use Athōn:
+
+```bash
+# Run a program (compile + execute in one step)
+./athon run examples/hello.at
+
+# Create a new project
+./athon new my-project
+cd my-project
+./athon run src/main.at
+
+# Build an optimized executable
+./athon build hello.at -O -o my-app
+
+# See all commands
+./athon help
+```
+
+**Why use the CLI?** It handles all the compilation steps automatically, manages intermediate files, and provides a streamlined developer experience.
+
+### 📚 Learn More
+
+- **[CLI Guide](CLI_GUIDE.md)** - Complete CLI documentation with workflows and tips
+- **[Quick Start](QUICKSTART.md)** - 5-minute getting started guide
+- **[Installation Guide](INSTALL.md)** - Detailed installation instructions
+
+### 🔧 Manual Compilation (Advanced)
+
+If you prefer direct compiler access:
 
 ```bash
 # Build the bootstrap compiler
 cd compiler/bootstrap
 bash build.sh
 cd ../..
-```
 
-### Quick Start
-
-```bash
-# Compile an example
+# Compile manually
 ./athon-boot examples/hello.at > hello.c
 gcc hello.c -o hello
 ./hello
-```
-
-### One-liner for Testing
-
-```bash
-./athon-boot examples/hello.at > /tmp/test.c && gcc /tmp/test.c -o /tmp/test && /tmp/test
 ```
 
 ## Documentation

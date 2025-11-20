@@ -155,27 +155,61 @@ else
 fi
 
 echo ""
+echo "════════════════════════════════════════════════════════════════"
+echo -e "${CYAN}Building Athōn CLI...${NC}"
+echo "════════════════════════════════════════════════════════════════"
+echo ""
+
+cd cli
+echo "Compiling CLI tool..."
+cargo build --release 2>&1 | grep -E "(Compiling|Finished)" || cargo build --release
+cp target/release/athon ../athon
+cd ..
+
+echo -e "${GREEN}✓${NC} CLI built successfully"
+
+# Install CLI if user chose system-wide
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+    echo "Installing CLI to /usr/local/bin/..."
+    if sudo cp athon /usr/local/bin/; then
+        echo -e "${GREEN}✓${NC} Installed to /usr/local/bin/athon"
+    fi
+fi
+
+echo ""
 echo "╔════════════════════════════════════════════════════════════════╗"
 echo "║                                                                ║"
 echo "║              ✅ Installation Complete! ✅                      ║"
 echo "║                                                                ║"
 echo "╚════════════════════════════════════════════════════════════════╝"
 echo ""
-echo "Next steps:"
+echo -e "${GREEN}🚀 Athōn is ready to use!${NC}"
 echo ""
-echo "1. Read the language guide:"
-echo "   cat docs/language-guide.md"
+echo "Quick start with the CLI:"
 echo ""
-echo "2. Try more examples:"
-echo "   ./athon-boot examples/showcase.at > showcase.c"
-echo "   gcc showcase.c -o showcase"
-echo "   ./showcase"
+echo "  ${CYAN}./athon run examples/hello.at${NC}"
+echo "    → Compile and run in one command"
 echo ""
-echo "3. Install editor support:"
-echo "   See editor-support/INSTALLATION.md"
+echo "  ${CYAN}./athon new my-project${NC}"
+echo "    → Create a new project"
 echo ""
-echo "4. Run all tests:"
-echo "   ./test-all-examples.sh"
+echo "  ${CYAN}./athon build hello.at -O${NC}"
+echo "    → Build optimized executable"
+echo ""
+echo "  ${CYAN}./athon help${NC}"
+echo "    → See all commands"
+echo ""
+echo "Or use the compiler directly:"
+echo ""
+echo "  ${CYAN}./athon-boot examples/hello.at > hello.c${NC}"
+echo "  ${CYAN}gcc hello.c -o hello && ./hello${NC}"
+echo ""
+echo "Learn more:"
+echo ""
+echo "  📖 Quick Start: cat QUICKSTART.md"
+echo "  📚 Language Guide: cat docs/language-guide.md"
+echo "  🎨 Editor Support: cat editor-support/INSTALLATION.md"
+echo "  🧪 Run Tests: ./test-all-examples.sh"
 echo ""
 echo "Happy coding with Athōn! 🚀"
 echo ""

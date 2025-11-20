@@ -5,10 +5,15 @@ Quick navigation guide for the Athōn programming language project.
 ## 🚀 Quick Start
 
 **New to Athōn?**
-1. Read [README.md](README.md)
-2. Follow [docs/language-guide.md](docs/language-guide.md)
-3. Try [examples/hello.at](examples/hello.at)
-4. Install [editor support](editor-support/README.md)
+1. Run `./install.sh` to set up everything
+2. Try `athon run examples/hello.at`
+3. Read [QUICKSTART.md](QUICKSTART.md) for 5-minute guide
+4. Create your first project: `athon new my-project`
+
+**Already installed?**
+- Run `./verify-setup.sh` to verify installation
+- Read [SETUP_COMPLETE.md](SETUP_COMPLETE.md) for usage guide
+- See [CLI_GUIDE.md](CLI_GUIDE.md) for complete CLI documentation
 
 **Want to contribute?**
 1. Read [CONTRIBUTING.md](CONTRIBUTING.md)
@@ -94,22 +99,33 @@ Quick navigation guide for the Athōn programming language project.
 
 ### Root Level
 - [README.md](README.md) - Project overview
+- [YOUR_NEXT_STEPS.md](YOUR_NEXT_STEPS.md) - **START HERE** after installation
+- [INSTALL.md](INSTALL.md) - Installation guide
+- [SETUP_COMPLETE.md](SETUP_COMPLETE.md) - Post-installation guide
+- [CLI_GUIDE.md](CLI_GUIDE.md) - Complete CLI documentation
+- [CLI_EXAMPLES.md](CLI_EXAMPLES.md) - Real-world CLI examples
+- [CLI_SUMMARY.md](CLI_SUMMARY.md) - CLI impact summary
+- [FILE_STRUCTURE.md](FILE_STRUCTURE.md) - Clean file structure
 - [LICENSE](LICENSE) - License information
 - [CHANGELOG.md](CHANGELOG.md) - Version history
 - [CONTRIBUTING.md](CONTRIBUTING.md) - How to contribute
 - [SECURITY.md](SECURITY.md) - Security policy
 - [REPRO_BUILD.md](REPRO_BUILD.md) - Build instructions
-- [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md) - Directory structure
+- [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md) - Detailed directory structure
 - [INDEX.md](INDEX.md) - This file
 
 ### Executables
 - [athon-boot](athon-boot) - Bootstrap compiler
+- [athon](athon) - Unified CLI tool (after installation)
 
 ## 🎯 Common Tasks
 
 ### Building
 ```bash
-# Build the compiler
+# One-command installation
+./install.sh
+
+# Or build manually
 ./ci/repro_build.sh
 
 # Run static checks
@@ -118,11 +134,27 @@ Quick navigation guide for the Athōn programming language project.
 
 ### Running Examples
 ```bash
-# Run hello world
-./athon-boot examples/hello.at
+# Using CLI (recommended)
+./athon run examples/hello.at
+./athon run examples/showcase.at
 
-# Run showcase
-./athon-boot examples/showcase.at
+# Or using compiler directly
+./athon-boot examples/hello.at > hello.c
+gcc hello.c -o hello && ./hello
+```
+
+### Creating Projects
+```bash
+# Create new project
+./athon new my-project
+cd my-project
+./athon run src/main.at
+
+# Run tests
+./athon test
+
+# Build release
+./athon build src/main.at -O -o my-app
 ```
 
 ### Editor Setup
