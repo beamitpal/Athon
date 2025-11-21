@@ -1,107 +1,158 @@
 # Athōn Language Support for VS Code
 
-Syntax highlighting and language support for the Athōn programming language.
+Complete language support for the Athōn programming language.
 
 ## Features
 
-- **Syntax Highlighting** - Full syntax highlighting for Athōn code
-- **Code Snippets** - Common code patterns and templates
-- **Auto-completion** - Bracket and quote auto-closing
-- **Comment Support** - Line and block comments
-- **Indentation** - Smart indentation rules
+### ✅ Syntax Highlighting
+- All keywords: `fn`, `let`, `if`, `match`, `type`, `trait`, `impl`, `import`
+- Types: `int`, `bool`, `string`, custom types
+- Operators, comments, strings
+- Built-in and user-defined functions
+
+### ✅ Code Snippets
+20+ snippets for common patterns:
+- `fn` - Function definition
+- `main` - Main function
+- `struct` - Struct definition
+- `enum` - Enum definition
+- `match` - Pattern matching
+- `trait` - Trait definition
+- `impl` - Trait implementation
+- And more...
+
+### ✅ Auto-completion
+- Keyword suggestions
+- Press `Ctrl+Space` for completions
+- Smart context-aware suggestions
+
+### ✅ Format on Save
+- Integrated formatter
+- Automatic formatting on save
+- Consistent code style
+- Configurable indentation
+
+### ✅ File Icons
+- Custom green Athōn icons for `.at` files
+- Works with Material Icon Theme
+- Keeps all other file icons normal
+
+### ✅ Language Recognition
+- `.at` files automatically recognized
+- Shows "Athōn" in status bar
+- Proper file associations
 
 ## Installation
 
-### From Source
-
-1. Copy this directory to your VS Code extensions folder:
-   - **Windows**: `%USERPROFILE%\.vscode\extensions\`
-   - **macOS/Linux**: `~/.vscode/extensions/`
-
-2. Restart VS Code
-
-3. Open any `.at` file to see syntax highlighting
-
-### From VSIX (Future)
-
+### From VSIX
 ```bash
-code --install-extension athon-language-0.3.0.vsix
+code --install-extension athon-language-0.4.0.vsix
 ```
+
+### From Marketplace (Coming Soon)
+Search for "Athōn" in VS Code Extensions
 
 ## Usage
 
-Simply open any file with `.at` extension and the syntax highlighting will be applied automatically.
-
 ### Snippets
+Type a snippet prefix and press `Tab`:
+- `fn` + Tab → Function template
+- `main` + Tab → Main function
+- `struct` + Tab → Struct definition
 
-Type these prefixes and press Tab:
+### Formatting
+- Automatic: Save file (`Ctrl+S`)
+- Manual: Command Palette → "Athōn: Format Document"
 
-- `fn` - Function definition
-- `main` - Main function
-- `if` - If statement
-- `ifelse` - If-else statement
-- `while` - While loop
-- `for` - For loop
-- `match` - Match statement
-- `struct` - Struct definition
-- `enum` - Enum definition
-- `let` - Variable declaration
-- `print` - Print statement
-- `printf` - Print with formatting
+### Icon Theme (Optional)
+For custom Athōn file icons:
 
-## Supported Features
+1. Install Material Icon Theme:
+```bash
+code --install-extension PKief.material-icon-theme
+```
 
-### Keywords
-- Control flow: `if`, `else`, `while`, `for`, `in`, `match`, `return`
-- Declarations: `fn`, `let`, `struct`, `enum`
-- Types: `int`, `bool`, `string`
-- Constants: `true`, `false`
-
-### Built-in Functions
-- I/O: `print`
-- Math: `abs`, `min`, `max`, `pow`, `sqrt`, `mod`
-- String: `length`, `concat`, `compare`
-- Array: `array_length`
-- File I/O: `file_read`, `file_write`, `file_append`, `file_exists`
-
-### Operators
-- Arithmetic: `+`, `-`, `*`, `/`, `%`
-- Comparison: `==`, `!=`, `<`, `>`, `<=`, `>=`
-- Logical: `&&`, `||`, `!`
-- Other: `->`, `=>`, `::`, `.`, `..`
-
-## Example
-
-```athon
-fn main() {
-    let x = 42;
-    print("Hello, Athōn!");
-    
-    if x > 10 {
-        print("x is greater than 10");
-    }
+2. Add to your settings.json:
+```json
+{
+  "workbench.iconTheme": "material-icon-theme",
+  "material-icon-theme.files.associations": {
+    "*.at": "../../.vscode/extensions/athon-lang.athon-language-0.4.0/icons/athon-file"
+  }
 }
 ```
 
-## Building VSIX Package
+This gives you:
+- Custom green icons for `.at` files
+- Material icons for all other files
+- No icon conflicts
 
-To create a distributable VSIX package:
+## Configuration
 
-```bash
-# Install vsce
-npm install -g vsce
+### Settings
 
-# Package the extension
-cd editor-support/vscode/athon
-vsce package
+```json
+{
+  "athon.formatOnSave": true,
+  "athon.indentSize": 4,
+  "athon.formatterPath": ""
+}
 ```
 
-This will create `athon-language-0.3.0.vsix` that can be distributed.
+### Workspace Settings
+
+```json
+{
+  "workbench.iconTheme": "athon-icons",
+  "[athon]": {
+    "editor.formatOnSave": true,
+    "editor.tabSize": 4
+  }
+}
+```
+
+## Requirements
+
+- VS Code 1.60.0 or higher
+- Python 3 (for formatter)
+
+## Extension Settings
+
+This extension contributes the following settings:
+
+* `athon.formatOnSave`: Enable/disable format on save
+* `athon.indentSize`: Number of spaces for indentation
+* `athon.formatterPath`: Custom path to formatter (auto-detected by default)
+
+## Known Issues
+
+None currently. Please report issues at: https://github.com/beamitpal/athon/issues
+
+## Release Notes
+
+### 0.4.0
+
+- ✅ Integrated formatter with format on save
+- ✅ File icons support
+- ✅ Enhanced syntax highlighting
+- ✅ 20+ code snippets
+- ✅ Auto-completion
+- ✅ Language configuration
 
 ## Contributing
 
-See [CONTRIBUTING.md](../../../CONTRIBUTING.md) for contribution guidelines.
+Contributions are welcome! Please see [CONTRIBUTING.md](https://github.com/beamitpal/athon/blob/main/CONTRIBUTING.md)
 
 ## License
 
-See [LICENSE](../../../LICENSE) for license information.
+See LICENSE file
+
+## More Information
+
+- [GitHub Repository](https://github.com/beamitpal/athon)
+- [Documentation](https://github.com/beamitpal/athon#readme)
+- [Report Issues](https://github.com/beamitpal/athon/issues)
+
+---
+
+**Enjoy coding in Athōn!** 🚀

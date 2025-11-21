@@ -25,9 +25,15 @@ Athōn is a sovereign, capability-secure, quantum-resistant systems programming 
 
 ## Current Status
 
-**Bootstrap Compiler:** Fully functional, compiles Athōn to C  
+**🎉 Self-Hosting Complete!** Athōn can now compile itself.
+
+**Bootstrap Compiler:** Fully functional with escape sequence support  
+**Self-Hosted Compiler:** 5 phases complete - true self-compilation achieved  
+**std/core Library:** Option, Result, Ordering types implemented  
 **Examples:** 31 working programs demonstrating all features  
 **Documentation:** Complete language guide, API reference, and examples catalog  
+
+See [SELF_COMPILATION_COMPLETE.md](SELF_COMPILATION_COMPLETE.md) for details.  
 **Test Coverage:** 100% of examples passing
 
 ## Getting Started

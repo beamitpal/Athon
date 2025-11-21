@@ -1,0 +1,73 @@
+// Union Types Example
+// Demonstrates the concept of multiple possible types
+
+// What union types would look like:
+// type Result = Ok(int) | Err(string);
+// type Value = Int(int) | String(string) | Bool(bool);
+
+// Current workaround: use tagged values
+fn handle_ok_value(value: int) {
+    print("Success: {}", value);
+}
+
+fn handle_err_value(code: int) {
+    print("Error code: {}", code);
+}
+
+// Simulate union type with separate functions
+fn process_result(is_ok: int, value: int) {
+    if is_ok == 1 {
+        handle_ok_value(value);
+    }
+    if is_ok == 0 {
+        handle_err_value(value);
+    }
+}
+
+fn main() {
+    print("=== Union Types Example ===");
+    print("");
+    
+    print("Handling success:");
+    process_result(1, 42);  // Ok(42)
+    
+    print("");
+    print("Handling failure:");
+    process_result(0, 404);  // Err(404)
+    
+    print("");
+    print("Note: With union types, this would be:");
+    print("  type Result = Ok(int) | Err(string);");
+    print("  let r: Result = Ok(42);");
+    print("  match r {");
+    print("    Ok(value) => print(value),");
+    print("    Err(msg) => print(msg),");
+    print("  }");
+    print("");
+    print("Benefits of union types:");
+    print("  - Type-safe multiple return types");
+    print("  - Pattern matching on variants");
+    print("  - No need for error codes");
+    print("  - Compiler-enforced error handling");
+}
+
+// Advanced union type examples:
+//
+// type JsonValue = 
+//     | Null
+//     | Bool(bool)
+//     | Number(int)
+//     | String(string)
+//     | Array(JsonValue[])
+//     | Object(Map<string, JsonValue>);
+//
+// type Option<T> = Some(T) | None;
+//
+// type Either<L, R> = Left(L) | Right(R);
+//
+// fn divide(a: int, b: int) -> Result<int, string> {
+//     if b == 0 {
+//         return Err("Division by zero");
+//     }
+//     return Ok(a / b);
+// }

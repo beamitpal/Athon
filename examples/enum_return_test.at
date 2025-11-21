@@ -1,0 +1,15 @@
+enum Color {
+    Red,
+    Blue,
+}
+
+fn test_enum() -> Color {
+    return Color::Red;
+}
+
+fn main() {
+    let c = test_enum();
+    if c == Color::Red {
+        print("Red!");
+    }
+}

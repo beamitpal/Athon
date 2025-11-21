@@ -1,0 +1,6 @@
+// Simple union type test
+type Result = Ok(int) | Err(int);
+
+fn main() {
+    print("Union type defined");
+}

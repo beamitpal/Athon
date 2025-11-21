@@ -1,0 +1,20 @@
+[package]
+name = "athon-bootstrap"
+version = "0.1.0"
+edition = "2021"
+authors = ["Athōn Language Team"]
+description = "Bootstrap compiler for the Athōn programming language (Stage 0)"
+license = "SEE LICENSE IN ../../LICENSE"
+
+[[bin]]
+name = "athon-boot"
+path = "src/main.rs"
+
+[dependencies]
+# No external dependencies - sovereignty principle
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+strip = true

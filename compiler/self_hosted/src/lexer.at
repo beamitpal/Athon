@@ -1,0 +1,241 @@
+// Complete Lexer implementation in Athōn
+import "compiler/self_hosted/src/token.at"
+
+struct Lexer {
+    input: string,
+    pos: int,
+    length: int,
+    line: int,
+    column: int,
+}
+
+fn new_lexer(input: string) -> Lexer {
+    return Lexer {
+        input: input,
+        pos: 0,
+        length: length(input),
+        line: 1,
+        column: 1,
+    };
+}
+
+fn peek(l: Lexer) -> int {
+    if l.pos >= l.length {
+        return 0;
+    }
+    return l.input[l.pos];
+}
+
+fn peek_ahead(l: Lexer, offset: int) -> int {
+    let pos = l.pos + offset;
+    if pos >= l.length {
+        return 0;
+    }
+    return l.input[pos];
+}
+
+fn advance(l: Lexer) {
+    if l.pos < l.length {
+        let c = l.input[l.pos];
+        if c == '\n' {
+            l.line = l.line + 1;
+            l.column = 1;
+        } else {
+            l.column = l.column + 1;
+        }
+        l.pos = l.pos + 1;
+    }
+}
+
+fn is_digit(c: int) -> bool {
+    return c >= '0' && c <= '9';
+}
+
+fn is_alpha(c: int) -> bool {
+    return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_';
+}
+
+fn is_alnum(c: int) -> bool {
+    return is_alpha(c) || is_digit(c);
+}
+
+fn skip_whitespace(l: Lexer) {
+    while l.pos < l.length {
+        let c = l.input[l.pos];
+        if c == ' ' || c == '\n' || c == '\t' || c == '\r' {
+            advance(l);
+        } else {
+            break;
+        }
+    }
+}
+
+fn make_token(kind: TokenKind, text: string, line: int, col: int) -> Token {
+    return Token {
+        kind: kind,
+        text: text,
+        line: line,
+        column: col,
+    };
+}
+
+fn match_keyword(text: string) -> TokenKind {
+    // Simple keyword matching using compare
+    if compare(text, "fn") == 0 { return TokenKind::Fn; }
+    if compare(text, "let") == 0 { return TokenKind::Let; }
+    if compare(text, "if") == 0 { return TokenKind::If; }
+    if compare(text, "else") == 0 { return TokenKind::Else; }
+    if compare(text, "while") == 0 { return TokenKind::While; }
+    if compare(text, "for") == 0 { return TokenKind::For; }
+    if compare(text, "return") == 0 { return TokenKind::Return; }
+    if compare(text, "struct") == 0 { return TokenKind::Struct; }
+    if compare(text, "enum") == 0 { return TokenKind::Enum; }
+    if compare(text, "match") == 0 { return TokenKind::Match; }
+    if compare(text, "import") == 0 { return TokenKind::Import; }
+    if compare(text, "true") == 0 { return TokenKind::True; }
+    if compare(text, "false") == 0 { return TokenKind::False; }
+    return TokenKind::Identifier;
+}
+
+fn next_token(l: Lexer) -> Token {
+    skip_whitespace(l);
+    
+    if l.pos >= l.length {
+        return make_token(TokenKind::EOF, "", l.line, l.column);
+    }
+    
+    let c = l.input[l.pos];
+    let token_line = l.line;
+    let token_col = l.column;
+    let start = l.pos;
+    
+    // Single character tokens
+    if c == '(' {
+        advance(l);
+        return make_token(TokenKind::LParen, "(", token_line, token_col);
+    }
+    if c == ')' {
+        advance(l);
+        return make_token(TokenKind::RParen, ")", token_line, token_col);
+    }
+    if c == '{' {
+        advance(l);
+        return make_token(TokenKind::LBrace, "{", token_line, token_col);
+    }
+    if c == '}' {
+        advance(l);
+        return make_token(TokenKind::RBrace, "}", token_line, token_col);
+    }
+    if c == '[' {
+        advance(l);
+        return make_token(TokenKind::LBracket, "[", token_line, token_col);
+    }
+    if c == ']' {
+        advance(l);
+        return make_token(TokenKind::RBracket, "]", token_line, token_col);
+    }
+    if c == ';' {
+        advance(l);
+        return make_token(TokenKind::Semicolon, ";", token_line, token_col);
+    }
+    if c == ',' {
+        advance(l);
+        return make_token(TokenKind::Comma, ",", token_line, token_col);
+    }
+    if c == '+' {
+        advance(l);
+        return make_token(TokenKind::Plus, "+", token_line, token_col);
+    }
+    if c == '*' {
+        advance(l);
+        return make_token(TokenKind::Star, "*", token_line, token_col);
+    }
+    if c == '/' {
+        advance(l);
+        return make_token(TokenKind::Slash, "/", token_line, token_col);
+    }
+    if c == '-' {
+        advance(l);
+        return make_token(TokenKind::Minus, "-", token_line,token_col);
+    }
+    
+    // Multi-character tokens
+    if c == ':' {
+        advance(l);
+        if l.pos < l.length && l.input[l.pos] == ':' {
+            advance(l);
+            return make_token(TokenKind::DoubleColon, "::", token_line, token_col);
+        }
+        return make_token(TokenKind::Colon, ":", token_line, token_col);
+    }
+    
+    if c == '=' {
+        advance(l);
+        if l.pos < l.length && l.input[l.pos] == '=' {
+            advance(l);
+            return make_token(TokenKind::EqualsEquals, "==", token_line, token_col);
+        }
+        return make_token(TokenKind::Equals, "=", token_line, token_col);
+    }
+    
+    if c == '!' {
+        advance(l);
+        if l.pos < l.length && l.input[l.pos] == '=' {
+            advance(l);
+            return make_token(TokenKind::NotEquals, "!=", token_line, token_col);
+        }
+        return make_token(TokenKind::Unknown, "!", token_line, token_col);
+    }
+    
+    if c == '<' {
+        advance(l);
+        return make_token(TokenKind::LessThan, "<", token_line, token_col);
+    }
+    
+    if c == '>' {
+        advance(l);
+        return make_token(TokenKind::GreaterThan, ">", token_line, token_col);
+    }
+    
+    if c == '.' {
+        advance(l);
+        return make_token(TokenKind::Dot, ".", token_line, token_col);
+    }
+    
+    // Numbers
+    if is_digit(c) {
+        while l.pos < l.length && is_digit(l.input[l.pos]) {
+            advance(l);
+        }
+        let text = substring(l.input, start, l.pos - start);
+        return make_token(TokenKind::Number, text, token_line, token_col);
+    }
+    
+    // Identifiers and keywords
+    if is_alpha(c) {
+        while l.pos < l.length && is_alnum(l.input[l.pos]) {
+            advance(l);
+        }
+        let text = substring(l.input, start, l.pos - start);
+        let kind = match_keyword(text);
+        return make_token(kind, text, token_line, token_col);
+    }
+    
+    // String literals
+    if c == '"' {
+        advance(l); // Skip opening quote
+        let str_start = l.pos;
+        while l.pos < l.length && l.input[l.pos] != '"' {
+            advance(l);
+        }
+        let text = substring(l.input, str_start, l.pos - str_start);
+        if l.pos < l.length {
+            advance(l); // Skip closing quote
+        }
+        return make_token(TokenKind::StringLiteral, text, token_line, token_col);
+    }
+    
+    // Unknown
+    advance(l);
+    return make_token(TokenKind::Unknown, "?", token_line, token_col);
+}

@@ -1,0 +1,59 @@
+// Traits - Working Example
+// Demonstrates trait definitions and implementations
+
+// Define a Display trait
+trait Display {
+    fn to_string(self: Point) -> int;
+}
+
+// Define a struct
+struct Point {
+    x: int,
+    y: int,
+}
+
+// Implement Display for Point
+impl Display for Point {
+    fn to_string(self: Point) -> int {
+        print("Point({}, {})", self.x, self.y);
+        return 0;
+    }
+}
+
+// Define another trait for Circle
+trait Drawable {
+    fn draw(self: Circle) -> int;
+}
+
+// Define another struct
+struct Circle {
+    x: int,
+    y: int,
+    radius: int,
+}
+
+// Implement Drawable for Circle
+impl Drawable for Circle {
+    fn draw(self: Circle) -> int {
+        print("Circle(center=({}, {}), radius={})", self.x, self.y, self.radius);
+        return 0;
+    }
+}
+
+fn main() {
+    print("=== Traits Example ===");
+    print("");
+    
+    let p = Point { x: 10, y: 20 };
+    let c = Circle { x: 5, y: 5, radius: 10 };
+    
+    print("Calling trait methods:");
+    to_string(p);
+    draw(c);
+    
+    print("");
+    print("Traits enable polymorphism:");
+    print("  - Define common interfaces");
+    print("  - Implement for multiple types");
+    print("  - Use vtables for dynamic dispatch");
+}

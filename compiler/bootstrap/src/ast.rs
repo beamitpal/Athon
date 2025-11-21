@@ -4,6 +4,7 @@
 pub enum Expr {
     Number(i32),
     Boolean(bool),
+    Char(char),
     String(String),
     Variable(String),
     ArrayLiteral(Vec<Expr>),
@@ -106,6 +107,8 @@ pub enum Statement {
     Return {
         value: Option<Expr>,
     },
+    Break,
+    Continue,
     Expr(Expr),
 }
 
@@ -118,6 +121,7 @@ pub struct Parameter {
 #[derive(Debug)]
 pub struct Function {
     pub name: String,
+    pub type_params: Vec<String>, // Generic type parameters: <T, U>
     pub params: Vec<Parameter>,
     pub return_type: Option<String>,
     pub body: Vec<Statement>,
@@ -132,6 +136,7 @@ pub struct StructField {
 #[derive(Debug)]
 pub struct StructDef {
     pub name: String,
+    pub type_params: Vec<String>, // Generic type parameters: <T>
     pub fields: Vec<StructField>,
 }
 
@@ -141,9 +146,55 @@ pub struct EnumDef {
     pub variants: Vec<String>,
 }
 
+#[derive(Debug, Clone)]
+pub struct TypeAlias {
+    pub name: String,
+    pub target_type: String,
+}
+
+// Trait definition
+#[derive(Debug)]
+pub struct TraitDef {
+    pub name: String,
+    pub methods: Vec<TraitMethod>,
+}
+
+#[derive(Debug)]
+pub struct TraitMethod {
+    pub name: String,
+    pub params: Vec<Parameter>,
+    pub return_type: Option<String>,
+}
+
+// Trait implementation
+#[derive(Debug)]
+pub struct TraitImpl {
+    pub trait_name: String,
+    pub type_name: String,
+    pub methods: Vec<Function>,
+}
+
+// Union type variant
+#[derive(Debug, Clone)]
+pub struct UnionVariant {
+    pub name: String,
+    pub associated_type: Option<String>, // Some(T) has associated type, None doesn't
+}
+
+// Union type definition
+#[derive(Debug)]
+pub struct UnionType {
+    pub name: String,
+    pub variants: Vec<UnionVariant>,
+}
+
 #[derive(Debug)]
 pub struct Program {
+    pub type_aliases: Vec<TypeAlias>,
     pub structs: Vec<StructDef>,
     pub enums: Vec<EnumDef>,
+    pub unions: Vec<UnionType>,
+    pub traits: Vec<TraitDef>,
+    pub impls: Vec<TraitImpl>,
     pub functions: Vec<Function>,
 }

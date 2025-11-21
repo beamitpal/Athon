@@ -1,0 +1,35 @@
+// Type Aliases Example
+// Demonstrates semantic naming with type aliases
+
+// Basic type aliases
+type UserId = int;
+type Score = int;
+type Callback = int;  // Will be fn(int) -> bool when function types work
+
+// Using type aliases
+fn create_user(id: UserId) -> UserId {
+    return id;
+}
+
+fn calculate_score(points: Score) -> Score {
+    return points * 2;
+}
+
+fn main() {
+    // Type aliases are just names for existing types
+    let user_id = 42;
+    let score = 100;
+    
+    print("User ID: {}", user_id);
+    print("Score: {}", score);
+    
+    let new_id = create_user(user_id);
+    let new_score = calculate_score(score);
+    
+    print("New User ID: {}", new_id);
+    print("New Score: {}", new_score);
+    
+    // Type aliases improve code readability
+    // UserId and Score are both int, but semantically different
+    print("Type aliases work! UserId and Score are semantic names for int");
+}

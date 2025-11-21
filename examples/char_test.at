@@ -1,0 +1,11 @@
+fn main() {
+    let c = 'a';
+    print("Char: {}", c);
+    
+    let n = '\n';
+    print("Newline: {}", n);
+    
+    if c == 'a' {
+        print("c is a");
+    }
+}

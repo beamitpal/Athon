@@ -62,6 +62,14 @@ for example in examples/*.at; do
         continue
     fi
     
+    # Skip library files (no main function)
+    if [[ "$name" == *"_lib" ]]; then
+        echo -e "${YELLOW}⊘ SKIPPED${NC} (library file)"
+        echo ""
+        skipped=$((skipped + 1))
+        continue
+    fi
+    
     # Show source code (first 10 lines)
     echo -e "${BLUE}Source (first 10 lines):${NC}"
     head -10 "$example" | sed 's/^/  /'

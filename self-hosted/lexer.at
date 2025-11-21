@@ -1,0 +1,153 @@
+// Athōn Lexer - Written in Athōn
+// A self-hosted lexer for the Athōn language
+
+// Token kinds (represented as integers)
+// Keywords: 0-19
+fn TOKEN_FN() -> int { return 0; }
+fn TOKEN_LET() -> int { return 1; }
+fn TOKEN_IF() -> int { return 2; }
+fn TOKEN_ELSE() -> int { return 3; }
+fn TOKEN_WHILE() -> int { return 4; }
+fn TOKEN_FOR() -> int { return 5; }
+fn TOKEN_RETURN() -> int { return 6; }
+fn TOKEN_BREAK() -> int { return 7; }
+fn TOKEN_CONTINUE() -> int { return 8; }
+fn TOKEN_STRUCT() -> int { return 9; }
+fn TOKEN_ENUM() -> int { return 10; }
+fn TOKEN_MATCH() -> int { return 11; }
+fn TOKEN_TRUE() -> int { return 12; }
+fn TOKEN_FALSE() -> int { return 13; }
+
+// Symbols: 20-49
+fn TOKEN_LPAREN() -> int { return 20; }
+fn TOKEN_RPAREN() -> int { return 21; }
+fn TOKEN_LBRACE() -> int { return 22; }
+fn TOKEN_RBRACE() -> int { return 23; }
+fn TOKEN_LBRACKET() -> int { return 24; }
+fn TOKEN_RBRACKET() -> int { return 25; }
+fn TOKEN_SEMICOLON() -> int { return 26; }
+fn TOKEN_COMMA() -> int { return 27; }
+fn TOKEN_COLON() -> int { return 28; }
+fn TOKEN_DOUBLE_COLON() -> int { return 29; }
+fn TOKEN_DOT() -> int { return 30; }
+fn TOKEN_ARROW() -> int { return 31; }
+fn TOKEN_FAT_ARROW() -> int { return 32; }
+
+// Operators: 50-69
+fn TOKEN_EQUALS() -> int { return 50; }
+fn TOKEN_EQUALS_EQUALS() -> int { return 51; }
+fn TOKEN_NOT_EQUALS() -> int { return 52; }
+fn TOKEN_LESS_THAN() -> int { return 53; }
+fn TOKEN_GREATER_THAN() -> int { return 54; }
+fn TOKEN_LESS_EQUALS() -> int { return 55; }
+fn TOKEN_GREATER_EQUALS() -> int { return 56; }
+fn TOKEN_PLUS() -> int { return 57; }
+fn TOKEN_MINUS() -> int { return 58; }
+fn TOKEN_STAR() -> int { return 59; }
+fn TOKEN_SLASH() -> int { return 60; }
+fn TOKEN_AND() -> int { return 61; }
+fn TOKEN_OR() -> int { return 62; }
+fn TOKEN_NOT() -> int { return 63; }
+
+// Literals: 70-79
+fn TOKEN_IDENTIFIER() -> int { return 70; }
+fn TOKEN_NUMBER() -> int { return 71; }
+fn TOKEN_STRING() -> int { return 72; }
+fn TOKEN_CHAR() -> int { return 73; }
+
+// Special: 80+
+fn TOKEN_UNDERSCORE() -> int { return 80; }
+fn TOKEN_EOF() -> int { return 90; }
+fn TOKEN_UNKNOWN() -> int { return 99; }
+
+// Token structure (simplified - in real implementation would be a struct)
+// For now, we'll use parallel arrays or return codes
+
+// Character classification helpers
+fn is_whitespace(c: int) -> int {
+    if c == 32 { return 1; }  // space
+    if c == 9 { return 1; }   // tab
+    if c == 10 { return 1; }  // newline
+    if c == 13 { return 1; }  // carriage return
+    return 0;
+}
+
+fn is_digit(c: int) -> int {
+    if c >= 48 && c <= 57 {  // '0' to '9'
+        return 1;
+    }
+    return 0;
+}
+
+fn is_alpha(c: int) -> int {
+    if c >= 65 && c <= 90 { return 1; }   // 'A' to 'Z'
+    if c >= 97 && c <= 122 { return 1; }  // 'a' to 'z'
+    if c == 95 { return 1; }              // '_'
+    return 0;
+}
+
+fn is_alnum(c: int) -> int {
+    if is_alpha(c) == 1 { return 1; }
+    if is_digit(c) == 1 { return 1; }
+    return 0;
+}
+
+// Keyword matching
+fn match_keyword(word: int, len: int) -> int {
+    // In a real implementation, we'd compare strings
+    // For now, return identifier token
+    // This is a simplified version
+    return TOKEN_IDENTIFIER();
+}
+
+// Simple lexer state
+fn lex_number(start: int) -> int {
+    // Scan digits
+    // Return TOKEN_NUMBER
+    return TOKEN_NUMBER();
+}
+
+fn lex_identifier(start: int) -> int {
+    // Scan alphanumeric characters
+    // Check if it's a keyword
+    // Return appropriate token
+    return TOKEN_IDENTIFIER();
+}
+
+// Main lexer demonstration
+fn main() {
+    print("=== Athōn Self-Hosted Lexer ===");
+    print("");
+    
+    // Token kind constants
+    print("Token Kinds:");
+    print("  fn:         {}", TOKEN_FN());
+    print("  let:        {}", TOKEN_LET());
+    print("  if:         {}", TOKEN_IF());
+    print("  identifier: {}", TOKEN_IDENTIFIER());
+    print("  number:     {}", TOKEN_NUMBER());
+    print("  lparen:     {}", TOKEN_LPAREN());
+    print("  rparen:     {}", TOKEN_RPAREN());
+    print("");
+    
+    // Character classification tests
+    print("Character Classification:");
+    let space = 32;
+    let digit = 53;  // '5'
+    let letter = 97; // 'a'
+    
+    print("  is_whitespace(32): {}", is_whitespace(space));
+    print("  is_digit(53):      {}", is_digit(digit));
+    print("  is_alpha(97):      {}", is_alpha(letter));
+    print("  is_alnum(53):      {}", is_alnum(digit));
+    print("  is_alnum(97):      {}", is_alnum(letter));
+    print("");
+    
+    // Demonstrate token recognition
+    print("Token Recognition:");
+    print("  Number token:     {}", lex_number(0));
+    print("  Identifier token: {}", lex_identifier(0));
+    print("");
+    
+    print("=== Lexer Demo Complete ===");
+}

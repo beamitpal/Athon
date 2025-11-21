@@ -1,0 +1,21 @@
+{
+  "workbench.iconTheme": "material-icon-theme",
+  "athon.formatOnSave": true,
+  "athon.indentSize": 4,
+  "athon.formatterPath": "",
+  "[athon]": {
+    "editor.defaultFormatter": "athon-lang.athon-language",
+    "editor.formatOnSave": true,
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true
+  },
+  "files.associations": {
+    "*.at": "athon",
+    "athon": "athon",
+    "athon-boot": "athon",
+    "athon-fmt": "athon"
+  },
+  "material-icon-theme.files.associations": {
+    "*.at": "../../.vscode/extensions/athon-lang.athon-language-0.4.0/icons/athon-file"
+  }
+}

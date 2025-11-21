@@ -9,6 +9,20 @@
 // IMPORTS AND DECLARATIONS
 // ============================================================================
 
+// Type aliases
+type UserId = int;
+type Score = int;
+type Callback = int;
+
+// Union types
+type Result = Ok(int) | Err(int);
+type Option = Some(int) | None;
+
+// Trait definitions
+trait Display {
+    fn to_string(self: Point) -> int;
+}
+
 // Struct definitions
 struct Point {
     x: int,
@@ -580,3 +594,50 @@ fn test_all_builtins() {
     let write_ok = file_write("file.txt", "data");
     let append_ok = file_append("file.txt", "more");
 }
+
+
+// ============================================================================
+// TYPE SYSTEM FEATURES (v0.4.0)
+// ============================================================================
+
+// Generic function
+fn max<T>(a: T, b: T) -> T {
+    if a > b {
+        return a;
+    }
+    return b;
+}
+
+// Generic struct
+struct Pair<T> {
+    first: T,
+    second: T,
+}
+
+// Trait implementation
+impl Display for Point {
+    fn to_string(self: Point) -> int {
+        print("Point({}, {})", self.x, self.y);
+        return 0;
+    }
+}
+
+// Using type aliases
+fn create_user(id: UserId, score: Score) -> UserId {
+    print("User ID: {}, Score: {}", id, score);
+    return id;
+}
+
+// Using union types (conceptual)
+fn handle_result(r: Result) -> int {
+    // Pattern matching on union types
+    match r {
+        Ok(value) => print("Success: {}", value),
+        Err(code) => print("Error: {}", code),
+    }
+    return 0;
+}
+
+// ============================================================================
+// END OF TYPE SYSTEM FEATURES
+// ============================================================================

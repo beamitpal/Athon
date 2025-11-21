@@ -1,0 +1,40 @@
+// Enhanced Type Inference Test
+// Tests improved type inference capabilities
+
+fn add(a: int, b: int) -> int {
+    return a + b;
+}
+
+fn main() {
+    print("=== Enhanced Type Inference ===");
+    print("");
+    
+    // Basic inference (already works)
+    let x = 42;
+    let y = 10;
+    let sum = x + y;
+    
+    print("x = {}", x);
+    print("y = {}", y);
+    print("sum = {}", sum);
+    
+    // Function return type inference
+    let result = add(x, y);
+    print("result = {}", result);
+    
+    // Array inference
+    let numbers = [1, 2, 3, 4, 5];
+    print("First: {}", numbers[0]);
+    print("Second: {}", numbers[1]);
+    
+    // Boolean inference
+    let is_positive = x > 0;
+    print("Is positive: {}", is_positive);
+    
+    // Chained operations
+    let complex = add(x, y) + 10;
+    print("Complex: {}", complex);
+    
+    print("");
+    print("Type inference working!");
+}

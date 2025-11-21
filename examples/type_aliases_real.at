@@ -1,0 +1,37 @@
+// Type Aliases - Real Implementation Test
+// Now with actual 'type' keyword support!
+
+type UserId = int;
+type Score = int;
+
+fn create_user(id: int) -> int {
+    return id;
+}
+
+fn calculate_score(points: int) -> int {
+    return points * 2;
+}
+
+fn main() {
+    print("=== Type Aliases - Real Implementation ===");
+    print("");
+    
+    let user_id = 42;
+    let score = 100;
+    
+    print("User ID: {}", user_id);
+    print("Score: {}", score);
+    
+    let new_id = create_user(user_id);
+    let new_score = calculate_score(score);
+    
+    print("");
+    print("After operations:");
+    print("New User ID: {}", new_id);
+    print("New Score: {}", new_score);
+    
+    print("");
+    print("Type aliases are now supported!");
+    print("  type UserId = int;");
+    print("  type Score = int;");
+}

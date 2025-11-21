@@ -10,12 +10,18 @@ pub enum TokenKind {
     For,
     In,
     Return,
+    Break,
+    Continue,
     Struct,
     Enum,
     Match,
     Import,
     True,
     False,
+    Type,
+    Trait,
+    Impl,
+    Pub,
     Identifier,
     Number,
     LParen,
@@ -46,7 +52,9 @@ pub enum TokenKind {
     Not,
     Arrow,
     FatArrow,
+    Pipe,
     StringLiteral,
+    CharLiteral,
     Underscore,
     EOF,
     Unknown,
@@ -248,7 +256,7 @@ impl Lexer {
                     self.advance();
                     self.make_token(TokenKind::Or, start)
                 } else {
-                    self.make_token(TokenKind::Unknown, start)
+                    self.make_token(TokenKind::Pipe, start)
                 }
             }
             b'.' => {
@@ -300,22 +308,102 @@ impl Lexer {
                     }
                 }
             }
+            b'\'' => {
+                let token_line = self.line;
+                let token_col = self.column;
+                self.advance(); // Advance past the opening '\''
+
+                let char_start = self.pos;
+                if self.peek() == b'\\' {
+                    // Check for escape sequence
+                    self.advance(); // Advance past '\\'
+                    match self.peek() {
+                        b'n' | b'r' | b't' | b'\\' | b'\'' | b'0' => {
+                            self.advance(); // Advance past the escaped char
+                        }
+                        _ => {
+                            // Unknown escape sequence, treat as error or literal char
+                            // For now, just advance past it and let the closing quote check handle it
+                            self.advance();
+                        }
+                    }
+                } else if self.peek() != b'\'' && self.peek() != 0 {
+                    self.advance(); // Advance past the character
+                } else {
+                    // Empty char literal or EOF immediately after opening quote
+                    // This will be caught by the closing quote check
+                }
+                let char_end = self.pos;
+
+                if self.peek() != b'\'' {
+                    eprintln!(
+                        "Error: Expected closing quote for char literal at line {}, column {}",
+                        token_line, token_col
+                    );
+                    std::process::exit(1);
+                }
+                self.advance(); // Advance past the closing '\''
+
+                Token {
+                    kind: TokenKind::CharLiteral,
+                    text: String::from_utf8_lossy(&self.input[char_start..char_end]).into_owned(),
+                    line: token_line,
+                    column: token_col,
+                }
+            }
             b'"' => {
                 let token_line = self.line;
                 let token_col = self.column;
                 self.advance();
-                let content_start = self.pos;
+                
+                // Parse string with escape sequences
+                let mut string_content = String::new();
                 while self.peek() != 0 && self.peek() != b'"' {
-                    self.advance();
+                    if self.peek() == b'\\' {
+                        // Handle escape sequences
+                        self.advance();
+                        match self.peek() {
+                            b'n' => {
+                                string_content.push('\n');
+                                self.advance();
+                            }
+                            b't' => {
+                                string_content.push('\t');
+                                self.advance();
+                            }
+                            b'r' => {
+                                string_content.push('\r');
+                                self.advance();
+                            }
+                            b'\\' => {
+                                string_content.push('\\');
+                                self.advance();
+                            }
+                            b'"' => {
+                                string_content.push('"');
+                                self.advance();
+                            }
+                            b'0' => {
+                                string_content.push('\0');
+                                self.advance();
+                            }
+                            _ => {
+                                // Unknown escape sequence, just include the backslash
+                                string_content.push('\\');
+                            }
+                        }
+                    } else {
+                        string_content.push(self.peek() as char);
+                        self.advance();
+                    }
                 }
-                let content_end = self.pos;
+                
                 if self.peek() == b'"' {
                     self.advance();
                 }
                 Token {
                     kind: TokenKind::StringLiteral,
-                    text: String::from_utf8_lossy(&self.input[content_start..content_end])
-                        .into_owned(),
+                    text: string_content,
                     line: token_line,
                     column: token_col,
                 }
@@ -342,12 +430,18 @@ impl Lexer {
                     "for" => TokenKind::For,
                     "in" => TokenKind::In,
                     "return" => TokenKind::Return,
+                    "break" => TokenKind::Break,
+                    "continue" => TokenKind::Continue,
                     "struct" => TokenKind::Struct,
                     "enum" => TokenKind::Enum,
                     "match" => TokenKind::Match,
                     "import" => TokenKind::Import,
                     "true" => TokenKind::True,
                     "false" => TokenKind::False,
+                    "type" => TokenKind::Type,
+                    "trait" => TokenKind::Trait,
+                    "impl" => TokenKind::Impl,
+                    "pub" => TokenKind::Pub,
                     _ => TokenKind::Identifier,
                 };
                 Token {

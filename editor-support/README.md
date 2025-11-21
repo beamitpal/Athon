@@ -2,12 +2,36 @@
 
 Syntax highlighting and editor integration for the Athōn programming language.
 
-## Quick Start
+## 🚀 Quick Install (Recommended)
 
-### VS Code (Recommended)
+**One command to install for all detected editors:**
 
 ```bash
-cp -r vscode/athon ~/.vscode/extensions/athon-language-0.3.0
+cd editor-support
+./install-editor-support.sh
+```
+
+This script will:
+- ✅ Detect which editors you have installed (VS Code, Sublime Text, Vim, Neovim)
+- ✅ Install Athōn support for each detected editor
+- ✅ Provide verification and next steps
+- ✅ Show you how to test the installation
+
+**To uninstall:**
+
+```bash
+cd editor-support
+./uninstall-editor-support.sh
+```
+
+## Manual Installation
+
+If you prefer manual installation or the script doesn't work:
+
+### VS Code
+
+```bash
+cp -r vscode/athon ~/.vscode/extensions/athon-language-0.4.0
 ```
 
 Restart VS Code and open any `.at` file!

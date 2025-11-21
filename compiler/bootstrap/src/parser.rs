@@ -29,25 +29,91 @@ impl Parser {
     }
 
     pub fn parse_program(&mut self) -> Program {
+        let mut type_aliases = Vec::new();
         let mut structs = Vec::new();
         let mut enums = Vec::new();
+        let mut unions = Vec::new();
+        let mut traits = Vec::new();
+        let mut impls = Vec::new();
         let mut functions = Vec::new();
 
         while self.current.kind != TokenKind::EOF {
-            if self.current.kind == TokenKind::Struct {
+            if self.current.kind == TokenKind::Type {
+                // Could be type alias or union type - peek ahead to determine
+                let saved_pos = self.lexer.pos;
+                let saved_line = self.lexer.line;
+                let saved_column = self.lexer.column;
+                let saved_current = self.current.clone();
+                
+                self.advance(); // consume 'type'
+                if self.current.kind == TokenKind::Identifier {
+                    self.advance(); // consume name
+                    if self.current.kind == TokenKind::Equals {
+                        self.advance(); // consume '='
+                        
+                        // Now check if first token is an identifier followed by '('
+                        // which indicates a union variant like Ok(int)
+                        let is_union = if self.current.kind == TokenKind::Identifier {
+                            let saved_pos2 = self.lexer.pos;
+                            let saved_line2 = self.lexer.line;
+                            let saved_column2 = self.lexer.column;
+                            let saved_current2 = self.current.clone();
+                            
+                            self.advance();
+                            let has_paren = self.current.kind == TokenKind::LParen;
+                            
+                            // Restore
+                            self.lexer.pos = saved_pos2;
+                            self.lexer.line = saved_line2;
+                            self.lexer.column = saved_column2;
+                            self.current = saved_current2;
+                            
+                            has_paren
+                        } else {
+                            false
+                        };
+                        
+                        // Restore to beginning and parse appropriately
+                        self.lexer.pos = saved_pos;
+                        self.lexer.line = saved_line;
+                        self.lexer.column = saved_column;
+                        self.current = saved_current;
+                        
+                        if is_union {
+                            unions.push(self.parse_union_type());
+                        } else {
+                            type_aliases.push(self.parse_type_alias());
+                        }
+                    } else {
+                        eprintln!("Error: Expected '=' after type name");
+                        process::exit(1);
+                    }
+                } else {
+                    eprintln!("Error: Expected type name");
+                    process::exit(1);
+                }
+            } else if self.current.kind == TokenKind::Struct {
                 structs.push(self.parse_struct());
             } else if self.current.kind == TokenKind::Enum {
                 enums.push(self.parse_enum());
+            } else if self.current.kind == TokenKind::Trait {
+                traits.push(self.parse_trait());
+            } else if self.current.kind == TokenKind::Impl {
+                impls.push(self.parse_impl());
             } else if self.current.kind == TokenKind::Fn {
                 functions.push(self.parse_function());
             } else if self.current.kind == TokenKind::Import {
                 let imported_program = self.parse_import();
+                type_aliases.extend(imported_program.type_aliases);
                 structs.extend(imported_program.structs);
                 enums.extend(imported_program.enums);
+                unions.extend(imported_program.unions);
+                traits.extend(imported_program.traits);
+                impls.extend(imported_program.impls);
                 functions.extend(imported_program.functions);
             } else {
                 eprintln!(
-                    "Error at line {}, column {}: Expected 'import', 'struct', 'enum', or 'fn', got '{}'",
+                    "Error at line {}, column {}: Expected 'type', 'import', 'struct', 'enum', 'trait', 'impl', or 'fn', got '{}'",
                     self.current.line, self.current.column, self.current.text
                 );
                 process::exit(1);
@@ -55,8 +121,12 @@ impl Parser {
         }
 
         Program {
+            type_aliases,
             structs,
             enums,
+            unions,
+            traits,
+            impls,
             functions,
         }
     }
@@ -88,6 +158,58 @@ impl Parser {
         // Parse imported content
         let mut parser = Parser::new(&content);
         parser.parse_program()
+    }
+
+    fn parse_type_alias(&mut self) -> TypeAlias {
+        if !self.expect(TokenKind::Type) {
+            eprintln!(
+                "Error at line {}, column {}: Expected 'type'",
+                self.current.line, self.current.column
+            );
+            process::exit(1);
+        }
+
+        let name = if self.current.kind == TokenKind::Identifier {
+            let n = self.current.text.clone();
+            self.advance();
+            n
+        } else {
+            eprintln!(
+                "Error at line {}, column {}: Expected type alias name",
+                self.current.line, self.current.column
+            );
+            process::exit(1);
+        };
+
+        if !self.expect(TokenKind::Equals) {
+            eprintln!(
+                "Error at line {}, column {}: Expected '=' after type alias name",
+                self.current.line, self.current.column
+            );
+            process::exit(1);
+        }
+
+        let target_type = if self.current.kind == TokenKind::Identifier {
+            let t = self.current.text.clone();
+            self.advance();
+            t
+        } else {
+            eprintln!(
+                "Error at line {}, column {}: Expected target type",
+                self.current.line, self.current.column
+            );
+            process::exit(1);
+        };
+
+        if !self.expect(TokenKind::Semicolon) {
+            eprintln!(
+                "Error at line {}, column {}: Expected ';' after type alias",
+                self.current.line, self.current.column
+            );
+            process::exit(1);
+        }
+
+        TypeAlias { name, target_type }
     }
 
     fn parse_enum(&mut self) -> EnumDef {
@@ -172,6 +294,13 @@ impl Parser {
             process::exit(1);
         };
 
+        // Parse optional type parameters: <T, U>
+        let type_params = if self.current.kind == TokenKind::LessThan {
+            self.parse_type_parameters()
+        } else {
+            Vec::new()
+        };
+
         if !self.expect(TokenKind::LBrace) {
             eprintln!(
                 "Error at line {}, column {}: Expected '{{'",
@@ -232,7 +361,7 @@ impl Parser {
             process::exit(1);
         }
 
-        StructDef { name, fields }
+        StructDef { name, type_params, fields }
     }
 
     fn parse_function(&mut self) -> Function {
@@ -254,6 +383,13 @@ impl Parser {
                 self.current.line, self.current.column
             );
             process::exit(1);
+        };
+
+        // Parse optional type parameters: <T, U>
+        let type_params = if self.current.kind == TokenKind::LessThan {
+            self.parse_type_parameters()
+        } else {
+            Vec::new()
         };
 
         if !self.expect(TokenKind::LParen) {
@@ -337,6 +473,7 @@ impl Parser {
 
         Function {
             name,
+            type_params,
             params,
             return_type,
             body: statements,
@@ -372,10 +509,10 @@ impl Parser {
         } else if self.current.kind == TokenKind::Return {
             self.advance();
 
-            let value = if self.current.kind != TokenKind::Semicolon {
-                Some(self.parse_expr())
-            } else {
+            let value = if self.current.kind == TokenKind::Semicolon {
                 None
+            } else {
+                Some(self.parse_expr())
             };
 
             if !self.expect(TokenKind::Semicolon) {
@@ -384,6 +521,24 @@ impl Parser {
             }
 
             Statement::Return { value }
+        } else if self.current.kind == TokenKind::Break {
+            self.advance();
+
+            if !self.expect(TokenKind::Semicolon) {
+                eprintln!("Expected ';' after break");
+                process::exit(1);
+            }
+
+            Statement::Break
+        } else if self.current.kind == TokenKind::Continue {
+            self.advance();
+
+            if !self.expect(TokenKind::Semicolon) {
+                eprintln!("Expected ';' after continue");
+                process::exit(1);
+            }
+
+            Statement::Continue
         } else if self.current.kind == TokenKind::If {
             self.advance();
 
@@ -877,6 +1032,16 @@ impl Parser {
                 self.advance();
                 Expr::String(s)
             }
+            TokenKind::CharLiteral => {
+                let s = self.current.text.clone();
+                self.advance();
+                if let Some(c) = s.chars().next() {
+                    Expr::Char(c)
+                } else {
+                    eprintln!("Empty char literal");
+                    process::exit(1);
+                }
+            }
             TokenKind::Identifier => {
                 let name = self.current.text.clone();
                 self.advance();
@@ -1070,5 +1235,280 @@ impl Parser {
                 process::exit(1);
             }
         }
+    }
+
+    // Parse type parameters: <T, U, V>
+    fn parse_type_parameters(&mut self) -> Vec<String> {
+        let mut type_params = Vec::new();
+        
+        if !self.expect(TokenKind::LessThan) {
+            return type_params;
+        }
+
+        loop {
+            if self.current.kind == TokenKind::Identifier {
+                type_params.push(self.current.text.clone());
+                self.advance();
+            } else {
+                eprintln!("Expected type parameter name");
+                process::exit(1);
+            }
+
+            if !self.expect(TokenKind::Comma) {
+                break;
+            }
+        }
+
+        if !self.expect(TokenKind::GreaterThan) {
+            eprintln!("Expected '>' after type parameters");
+            process::exit(1);
+        }
+
+        type_params
+    }
+
+    // Parse union type: type Result = Ok(int) | Err(string);
+    fn parse_union_type(&mut self) -> UnionType {
+        if !self.expect(TokenKind::Type) {
+            eprintln!("Expected 'type'");
+            process::exit(1);
+        }
+
+        let name = if self.current.kind == TokenKind::Identifier {
+            let n = self.current.text.clone();
+            self.advance();
+            n
+        } else {
+            eprintln!("Expected union type name");
+            process::exit(1);
+        };
+
+        if !self.expect(TokenKind::Equals) {
+            eprintln!("Expected '=' after union type name");
+            process::exit(1);
+        }
+
+        let mut variants = Vec::new();
+
+        // Parse first variant
+        variants.push(self.parse_union_variant());
+
+        // Parse remaining variants separated by |
+        while self.current.kind == TokenKind::Pipe {
+            self.advance();
+            variants.push(self.parse_union_variant());
+        }
+
+        if !self.expect(TokenKind::Semicolon) {
+            eprintln!("Expected ';' after union type definition");
+            process::exit(1);
+        }
+
+        UnionType { name, variants }
+    }
+
+    fn parse_union_variant(&mut self) -> UnionVariant {
+        let name = if self.current.kind == TokenKind::Identifier {
+            let n = self.current.text.clone();
+            self.advance();
+            n
+        } else {
+            eprintln!("Expected variant name");
+            process::exit(1);
+        };
+
+        // Check for associated type: Ok(int)
+        let associated_type = if self.current.kind == TokenKind::LParen {
+            self.advance();
+            let type_name = if self.current.kind == TokenKind::Identifier {
+                let t = self.current.text.clone();
+                self.advance();
+                Some(t)
+            } else {
+                eprintln!("Expected type in union variant");
+                process::exit(1);
+            };
+
+            if !self.expect(TokenKind::RParen) {
+                eprintln!("Expected ')' after variant type");
+                process::exit(1);
+            }
+
+            type_name
+        } else {
+            None
+        };
+
+        UnionVariant { name, associated_type }
+    }
+
+    // Parse trait definition
+    fn parse_trait(&mut self) -> TraitDef {
+        if !self.expect(TokenKind::Trait) {
+            eprintln!("Expected 'trait'");
+            process::exit(1);
+        }
+
+        let name = if self.current.kind == TokenKind::Identifier {
+            let n = self.current.text.clone();
+            self.advance();
+            n
+        } else {
+            eprintln!("Expected trait name");
+            process::exit(1);
+        };
+
+        if !self.expect(TokenKind::LBrace) {
+            eprintln!("Expected '{{' after trait name");
+            process::exit(1);
+        }
+
+        let mut methods = Vec::new();
+
+        while self.current.kind != TokenKind::RBrace && self.current.kind != TokenKind::EOF {
+            methods.push(self.parse_trait_method());
+        }
+
+        if !self.expect(TokenKind::RBrace) {
+            eprintln!("Expected '}}' after trait definition");
+            process::exit(1);
+        }
+
+        TraitDef { name, methods }
+    }
+
+    fn parse_trait_method(&mut self) -> TraitMethod {
+        if !self.expect(TokenKind::Fn) {
+            eprintln!("Expected 'fn' in trait method");
+            process::exit(1);
+        }
+
+        let name = if self.current.kind == TokenKind::Identifier {
+            let n = self.current.text.clone();
+            self.advance();
+            n
+        } else {
+            eprintln!("Expected method name");
+            process::exit(1);
+        };
+
+        if !self.expect(TokenKind::LParen) {
+            eprintln!("Expected '(' after method name");
+            process::exit(1);
+        }
+
+        let mut params = Vec::new();
+        if self.current.kind != TokenKind::RParen {
+            loop {
+                let param_name = if self.current.kind == TokenKind::Identifier {
+                    let n = self.current.text.clone();
+                    self.advance();
+                    n
+                } else {
+                    eprintln!("Expected parameter name");
+                    process::exit(1);
+                };
+
+                if !self.expect(TokenKind::Colon) {
+                    eprintln!("Expected ':' after parameter name");
+                    process::exit(1);
+                }
+
+                let type_name = if self.current.kind == TokenKind::Identifier {
+                    let t = self.current.text.clone();
+                    self.advance();
+                    t
+                } else {
+                    eprintln!("Expected type after ':'");
+                    process::exit(1);
+                };
+
+                params.push(Parameter {
+                    name: param_name,
+                    type_name,
+                });
+
+                if !self.expect(TokenKind::Comma) {
+                    break;
+                }
+            }
+        }
+
+        if !self.expect(TokenKind::RParen) {
+            eprintln!("Expected ')' after parameters");
+            process::exit(1);
+        }
+
+        let return_type = if self.current.kind == TokenKind::Arrow {
+            self.advance();
+            if self.current.kind == TokenKind::Identifier {
+                let t = self.current.text.clone();
+                self.advance();
+                Some(t)
+            } else {
+                eprintln!("Expected return type after '->'");
+                process::exit(1);
+            }
+        } else {
+            None
+        };
+
+        if !self.expect(TokenKind::Semicolon) {
+            eprintln!("Expected ';' after trait method signature");
+            process::exit(1);
+        }
+
+        TraitMethod { name, params, return_type }
+    }
+
+    // Parse trait implementation
+    fn parse_impl(&mut self) -> TraitImpl {
+        if !self.expect(TokenKind::Impl) {
+            eprintln!("Expected 'impl'");
+            process::exit(1);
+        }
+
+        let trait_name = if self.current.kind == TokenKind::Identifier {
+            let n = self.current.text.clone();
+            self.advance();
+            n
+        } else {
+            eprintln!("Expected trait name");
+            process::exit(1);
+        };
+
+        // Expect 'for'
+        if self.current.kind != TokenKind::For {
+            eprintln!("Expected 'for' after trait name in impl");
+            process::exit(1);
+        }
+        self.advance();
+
+        let type_name = if self.current.kind == TokenKind::Identifier {
+            let n = self.current.text.clone();
+            self.advance();
+            n
+        } else {
+            eprintln!("Expected type name after 'for'");
+            process::exit(1);
+        };
+
+        if !self.expect(TokenKind::LBrace) {
+            eprintln!("Expected '{{' after impl declaration");
+            process::exit(1);
+        }
+
+        let mut methods = Vec::new();
+
+        while self.current.kind != TokenKind::RBrace && self.current.kind != TokenKind::EOF {
+            methods.push(self.parse_function());
+        }
+
+        if !self.expect(TokenKind::RBrace) {
+            eprintln!("Expected '}}' after impl block");
+            process::exit(1);
+        }
+
+        TraitImpl { trait_name, type_name, methods }
     }
 }

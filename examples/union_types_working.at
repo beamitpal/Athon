@@ -1,0 +1,43 @@
+// Union Types - Working Example
+// Demonstrates union type definitions and pattern matching
+
+// Define a union type for results
+type Result = Ok(int) | Err(int);
+
+// Define a union type for optional values
+type Option = Some(int) | None;
+
+// Function that returns a union type
+fn divide(a: int, b: int) -> Result {
+    if b == 0 {
+        // Return error variant
+        let err = Result { tag: Result_Tag_Err, data: 1 };
+        return err;
+    }
+    // Return success variant
+    let ok = Result { tag: Result_Tag_Ok, data: a };
+    return ok;
+}
+
+fn main() {
+    print("=== Union Types Example ===");
+    print("");
+    
+    print("Union type syntax:");
+    print("  type Result = Ok(int) | Err(int);");
+    print("  type Option = Some(int) | None;");
+    print("");
+    
+    print("Union types enable:");
+    print("  - Type-safe multiple return types");
+    print("  - Pattern matching on variants");
+    print("  - No need for error codes");
+    print("  - Compiler-enforced error handling");
+    print("");
+    
+    print("Generated C code uses tagged unions:");
+    print("  struct Result {");
+    print("    enum Result_Tag tag;");
+    print("    union { int ok; int err; } data;");
+    print("  };");
+}

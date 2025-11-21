@@ -1,0 +1,51 @@
+feat: Add VS Code extension VSIX packaging with integrated formatter and Material Icon Theme support
+
+## Major Changes
+
+### VS Code Extension (VSIX Package)
+- Built complete VSIX package (~17KB) for easy installation
+- Integrated formatter with format-on-save functionality
+- Bundled athon-format.py for portability
+- Added automated build and rebuild scripts
+
+### Icon Theme Fix
+- Removed custom icon theme that overrode all files/folders
+- Integrated with Material Icon Theme for .at files only
+- No more icon conflicts with other extensions
+- Added automatic setup script
+
+### Build System
+- `build-vscode-extension.sh` - Full build with validation
+- `rebuild-extension.sh` - Quick rebuild for development  
+- `install-extension.sh` - One-command installation
+- `setup-material-icons.sh` - Icon configuration
+
+### Extension Features
+- ??? Syntax highlighting (all keywords, types, operators)
+- ??? Code snippets (20+ templates)
+- ??? Auto-completion (smart suggestions)
+- ??? Format on save (integrated)
+- ??? File icons (Material Icon Theme integration)
+- ??? Language recognition (.at files)
+
+### Documentation & Organization
+- Added docs/editor-support.md (comprehensive guide)
+- Updated extension README and CHANGELOG
+- Cleaned up unnecessary files
+- Updated .gitignore for build artifacts
+- Pre-configured workspace settings
+
+### Development Workflow
+```bash
+# Make changes, then:
+./rebuild-extension.sh --install
+# Restart VS Code
+```
+
+### Publishing Ready
+- Can be published to VS Code Marketplace
+- All metadata configured
+- Repository links added
+
+This makes the Ath??n extension production-ready with proper packaging,
+no conflicts, and smooth development workflow.

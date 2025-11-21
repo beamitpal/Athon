@@ -1,7 +1,7 @@
 # Athōn Editor Support - Status Report
 
-**Date:** 2024-11-20  
-**Version:** 0.3.0  
+**Date:** 2025-11-21  
+**Version:** 0.4.0  
 **Status:** ✅ **PRODUCTION READY**
 
 ---
@@ -48,8 +48,8 @@ The Athōn editor support has been comprehensively reviewed, fixed, and enhanced
 ### Complete Feature Support ✅
 
 **Syntax Elements:**
-- ✅ Keywords (15+): `fn`, `let`, `if`, `else`, `while`, `for`, `match`, `return`, etc.
-- ✅ Types (3+): `int`, `bool`, `string`, user-defined types
+- ✅ Keywords (18+): `fn`, `let`, `if`, `else`, `while`, `for`, `match`, `return`, `type`, `trait`, `impl`, `import`, etc.
+- ✅ Types (3+): `int`, `bool`, `string`, user-defined types, type aliases, generics, union types
 - ✅ Operators (20+): Arithmetic, comparison, logical, special
 - ✅ Built-in Functions (14): Math, string, array, file I/O
 - ✅ Comments: Line (`//`) and block (`/* */`)

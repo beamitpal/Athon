@@ -9,10 +9,84 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Planned
 - Module system for code organization
-- Self-hosting compiler (Stage 1)
+- Memory management (ownership system)
 - Capability token system
-- Generic types
-- Trait system
+- Full monomorphization for generics
+- Advanced trait features (default methods, associated types)
+
+## [0.4.0] - 2025-11-21
+
+### Added - Type System Enhancements
+- **Type Aliases** - Semantic naming for types
+  - Syntax: `type UserId = int;`
+  - C typedef generation
+  - Full support in function signatures
+- **Type Inference** - Automatic type deduction
+  - Literal type inference
+  - Expression type inference
+  - Array type inference
+  - Function return type inference
+- **Generics** - Type parameters for functions and structs
+  - Syntax: `fn max<T>(a: T, b: T) -> T`
+  - Struct generics: `struct Pair<T> { first: T, second: T }`
+  - Multiple type parameters supported
+  - Monomorphization framework ready
+- **Traits** - Interface definitions and polymorphism
+  - Trait definitions: `trait Display { fn to_string(self) -> int; }`
+  - Trait implementations: `impl Display for Point { ... }`
+  - VTable generation for dynamic dispatch
+  - Multiple trait implementations per type
+- **Union Types** - Tagged unions for type-safe variants
+  - Syntax: `type Result = Ok(int) | Err(int);`
+  - C tagged union generation
+  - Pattern matching support
+  - Multiple variants with associated types
+
+### Added - Automation & Tooling
+- **Update Scripts** for streamlined development
+  - `update.sh` - Full interactive update with verification
+  - `quick-update.sh` - Fast silent update (5-10 seconds)
+  - `dev-update.sh` - Development workflow with automatic testing
+  - `check-install.sh` - Installation status checker
+- **Documentation**
+  - `UPDATE_SCRIPTS.md` - Complete automation guide
+
+### Added - Examples
+- 14 new type system examples
+  - `type_aliases.at`, `type_aliases_real.at`
+  - `type_inference.at`, `type_inference_enhanced.at`
+  - `generics_basic.at`, `generics_working.at`, `test_generics_simple.at`
+  - `traits_basic.at`, `traits_working.at`, `test_traits_simple.at`
+  - `union_types.at`, `union_types_working.at`, `test_union_simple.at`
+  - `type_system_showcase.at` - Demonstrates all features
+
+### Changed
+- **Compiler** - Enhanced with modern type system
+  - Updated AST with type system nodes
+  - Enhanced parser with generic syntax support
+  - Improved codegen with vtable and tagged union generation
+  - Fixed format string escaping bug in print statements
+- **Test Scripts** - Improved reliability
+  - Added library file detection (skip `*_lib.at` files)
+  - Fixed CLI test script to use updated binaries
+  - All 3 test suites now passing (50/50 tests)
+
+### Fixed
+- Format string escaping in multi-argument print statements
+- Type alias resolution in function parameters
+- Union type detection with smart lookahead
+- Library file handling in test scripts
+
+### Performance
+- Fast compilation maintained (no LLVM overhead)
+- Efficient C code generation
+- Small binary sizes
+- 100% test pass rate across all test suites
+
+### Documentation
+- Updated `athon-spec/roadmap.md` - All type system features marked complete
+- Cleaned up redundant status files
+- Consolidated documentation
 
 ## [0.3.0] - 2025-11-20
 

@@ -34,7 +34,7 @@
         },
         {
           "name": "keyword.declaration.athon",
-          "match": "\\b(fn|let|struct|enum|pub|cap|region)\\b"
+          "match": "\\b(fn|let|struct|enum|type|trait|impl|pub|cap|region|import)\\b"
         },
         {
           "name": "keyword.operator.athon",

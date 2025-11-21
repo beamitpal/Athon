@@ -1,0 +1,12 @@
+fn main() {
+    let s = "Hello, World!";
+    
+    let sub1 = substring(s, 0, 5);
+    print("sub1: {}", sub1);
+    
+    let sub2 = substring(s, 7, 5);
+    print("sub2: {}", sub2);
+    
+    let sub3 = substring(s, 0, 13);
+    print("sub3: {}", sub3);
+}

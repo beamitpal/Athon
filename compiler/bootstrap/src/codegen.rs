@@ -3,13 +3,54 @@
 use crate::ast::*;
 use std::process;
 
+// --- Helper Functions ---
+
+fn escape_string_for_c(s: &str) -> String {
+    let mut result = String::new();
+    for ch in s.chars() {
+        match ch {
+            '\n' => result.push_str("\\n"),
+            '\t' => result.push_str("\\t"),
+            '\r' => result.push_str("\\r"),
+            '\\' => result.push_str("\\\\"),
+            '"' => result.push_str("\\\""),
+            '\0' => result.push_str("\\0"),
+            _ => result.push(ch),
+        }
+    }
+    result
+}
+
 // --- Codegen ---
 
 pub fn emit_c(program: &Program) {
+    // Build a set of enum names for type checking
+    let enum_names: std::collections::HashSet<String> = program
+        .enums
+        .iter()
+        .map(|e| e.name.clone())
+        .collect();
+    
+    // Build a set of type alias names
+    let type_alias_names: std::collections::HashSet<String> = program
+        .type_aliases
+        .iter()
+        .map(|ta| ta.name.clone())
+        .collect();
+    
     println!("#include <stdio.h>");
     println!("#include <string.h>");
     println!("#include <stdlib.h>");
     println!();
+    
+    // Emit type aliases as C typedefs
+    for type_alias in &program.type_aliases {
+        let c_target_type = get_c_type(&type_alias.target_type, &enum_names, &type_alias_names);
+        println!("typedef {} {};", c_target_type, type_alias.name);
+    }
+    if !program.type_aliases.is_empty() {
+        println!();
+    }
 
     // Emit math helper functions
     println!("// Math helper functions");
@@ -77,20 +118,45 @@ pub fn emit_c(program: &Program) {
     println!("}}");
     println!();
 
+    // Emit string helper functions
+    println!("// String helper functions");
+    println!("char* __athon_substring(const char* str, int start, int length) {{");
+    println!("    int str_len = strlen(str);");
+    println!("    if (start < 0 || start >= str_len || length <= 0) return \"\";");
+    println!("    if (start + length > str_len) length = str_len - start;");
+    println!("    char* result = (char*)malloc(length + 1);");
+    println!("    if (!result) return \"\";");
+    println!("    strncpy(result, str + start, length);");
+    println!("    result[length] = '\\0';");
+    println!("    return result;");
+    println!("}}");
+    println!();
+
     // Emit struct definitions
     for struct_def in &program.structs {
-        println!("struct {} {{", struct_def.name);
-        for field in &struct_def.fields {
-            let c_type = match field.type_name.as_str() {
-                "int" => "int",
-                "bool" => "int",
-                "string" => "const char*",
-                _ => &field.type_name,
-            };
-            println!("    {} {};", c_type, field.name);
+        if struct_def.type_params.is_empty() {
+            // Non-generic struct
+            println!("struct {} {{", struct_def.name);
+            for field in &struct_def.fields {
+                let c_type = match field.type_name.as_str() {
+                    "int" => "int",
+                    "bool" => "int",
+                    "string" => "const char*",
+                    _ => &field.type_name,
+                };
+                println!("    {} {};", c_type, field.name);
+            }
+            println!("}};");
+            println!();
+        } else {
+            // Generic struct - emit as comment for now
+            // In a full implementation, we'd track instantiations and generate concrete types
+            println!("// Generic struct {} with type parameters: {}", 
+                struct_def.name, 
+                struct_def.type_params.join(", "));
+            println!("// Note: Generic structs require monomorphization at usage sites");
+            println!();
         }
-        println!("}};");
-        println!();
     }
 
     // Emit enum definitions
@@ -103,11 +169,88 @@ pub fn emit_c(program: &Program) {
         println!();
     }
 
+    // Emit union type definitions
+    for union_type in &program.unions {
+        println!("// Union type: {}", union_type.name);
+        println!("enum {}_Tag {{", union_type.name);
+        for variant in &union_type.variants {
+            println!("    {}_Tag_{},", union_type.name, variant.name);
+        }
+        println!("}};");
+        println!();
+        
+        println!("struct {} {{", union_type.name);
+        println!("    enum {}_Tag tag;", union_type.name);
+        println!("    union {{");
+        for variant in &union_type.variants {
+            if let Some(assoc_type) = &variant.associated_type {
+                let c_type = get_c_type(assoc_type, &enum_names, &type_alias_names);
+                println!("        {} {};", c_type, variant.name.to_lowercase());
+            }
+        }
+        println!("    }} data;");
+        println!("}};");
+        println!();
+    }
+
+    // Emit trait definitions as vtables
+    for trait_def in &program.traits {
+        println!("// Trait: {}", trait_def.name);
+        println!("struct {}_VTable {{", trait_def.name);
+        for method in &trait_def.methods {
+            let return_type = method.return_type.as_deref().unwrap_or("void");
+            let c_return_type = get_c_type(return_type, &enum_names, &type_alias_names);
+            print!("    {} (*{})(", c_return_type, method.name);
+            for (i, param) in method.params.iter().enumerate() {
+                if i > 0 {
+                    print!(", ");
+                }
+                let c_type = get_c_type(&param.type_name, &enum_names, &type_alias_names);
+                print!("{}", c_type);
+            }
+            println!(");");
+        }
+        println!("}};");
+        println!();
+    }
+
+    // Emit trait implementations
+    for impl_block in &program.impls {
+        println!("// Impl {} for {}", impl_block.trait_name, impl_block.type_name);
+        
+        // Emit each method
+        for method in &impl_block.methods {
+            emit_function(method, &enum_names, &type_alias_names);
+            println!();
+        }
+        
+        // Emit vtable instance
+        println!("struct {}_VTable {}_{}_vtable = {{", 
+            impl_block.trait_name, 
+            impl_block.type_name,
+            impl_block.trait_name);
+        for method in &impl_block.methods {
+            println!("    .{} = {},", method.name, method.name);
+        }
+        println!("}};");
+        println!();
+    }
+
     // Emit all non-main functions
     for func in &program.functions {
         if func.name != "main" {
-            emit_function(func);
-            println!();
+            if func.type_params.is_empty() {
+                // Non-generic function
+                emit_function(func, &enum_names, &type_alias_names);
+                println!();
+            } else {
+                // Generic function - emit as comment
+                println!("// Generic function {} with type parameters: {}", 
+                    func.name, 
+                    func.type_params.join(", "));
+                println!("// Note: Generic functions require monomorphization at call sites");
+                println!();
+            }
         }
     }
 
@@ -119,15 +262,29 @@ pub fn emit_c(program: &Program) {
     }
 }
 
-fn emit_function(func: &Function) {
-    let return_type = func.return_type.as_deref().unwrap_or("void");
-    let c_return_type = match return_type {
+fn get_c_type(type_name: &str, enum_names: &std::collections::HashSet<String>, type_alias_names: &std::collections::HashSet<String>) -> String {
+    match type_name {
         "int" => "int".to_string(),
         "bool" => "int".to_string(),
         "string" => "const char*".to_string(),
         "void" => "void".to_string(),
-        _ => format!("struct {}", return_type),
-    };
+        _ => {
+            if enum_names.contains(type_name) {
+                format!("enum {}", type_name)
+            } else if type_alias_names.contains(type_name) {
+                // Type alias - use directly (already typedef'd)
+                type_name.to_string()
+            } else {
+                // Struct type
+                format!("struct {}", type_name)
+            }
+        }
+    }
+}
+
+fn emit_function(func: &Function, enum_names: &std::collections::HashSet<String>, type_alias_names: &std::collections::HashSet<String>) {
+    let return_type = func.return_type.as_deref().unwrap_or("void");
+    let c_return_type = get_c_type(return_type, enum_names, type_alias_names);
 
     print!("{} {}(", c_return_type, func.name);
 
@@ -135,12 +292,7 @@ fn emit_function(func: &Function) {
         if i > 0 {
             print!(", ");
         }
-        let c_type = match param.type_name.as_str() {
-            "int" => "int".to_string(),
-            "bool" => "int".to_string(),
-            "string" => "const char*".to_string(),
-            _ => format!("struct {}", param.type_name),
-        };
+        let c_type = get_c_type(&param.type_name, enum_names, type_alias_names);
         print!("{} {}", c_type, param.name);
     }
 
@@ -200,6 +352,12 @@ fn emit_statement(stmt: &Statement, indent: usize) {
                     emit_expr(value);
                     println!(";");
                 }
+                Expr::Call { name: fn_name, .. } if fn_name == "substring" => {
+                    // substring returns char*
+                    print!("{}char* {} = ", ind, name);
+                    emit_expr(value);
+                    println!(";");
+                }
                 _ => {
                     // Default to int for numbers, booleans, expressions
                     print!("{}int {} = ", ind, name);
@@ -214,12 +372,19 @@ fn emit_statement(stmt: &Statement, indent: usize) {
             println!(";");
         }
         Statement::Return { value } => {
-            print!("{}return", ind);
             if let Some(expr) = value {
-                print!(" ");
+                print!("{}return ", ind);
                 emit_expr(expr);
+                println!(";");
+            } else {
+                println!("{}return;", ind);
             }
-            println!(";");
+        }
+        Statement::Break => {
+            println!("{}break;", ind);
+        }
+        Statement::Continue => {
+            println!("{}continue;", ind);
         }
         Statement::If {
             condition,
@@ -354,7 +519,7 @@ fn emit_statement(stmt: &Statement, indent: usize) {
                         let arg = &args[0];
                         match arg {
                             Expr::String(s) => {
-                                println!("printf(\"{}\");", s);
+                                println!("printf(\"{}\");", escape_string_for_c(s));
                             }
                             _ => {
                                 print!("printf(\"%d\\n\", ");
@@ -376,7 +541,9 @@ fn emit_statement(stmt: &Statement, indent: usize) {
                             // Replace with %d by default (could be improved with type checking)
                             c_format = c_format.replace("{}", "%d");
 
-                            print!("printf(\"{}\"", c_format);
+                            // Escape the format string for C
+                            let escaped_format = escape_string_for_c(&c_format);
+                            print!("printf(\"{}\"", escaped_format);
 
                             // Emit remaining arguments
                             for arg in &args[1..] {
@@ -403,7 +570,16 @@ fn emit_expr(expr: &Expr) {
     match expr {
         Expr::Number(n) => print!("{}", n),
         Expr::Boolean(b) => print!("{}", if *b { 1 } else { 0 }),
-        Expr::String(s) => print!("\"{}\"", s),
+        Expr::Char(c) => match c {
+            '\n' => print!("'\\n'"),
+            '\r' => print!("'\\r'"),
+            '\t' => print!("'\\t'"),
+            '\\' => print!("'\\\\'"),
+            '\'' => print!("'\\''"),
+            '\0' => print!("'\\0'"),
+            _ => print!("'{}'", c),
+        },
+        Expr::String(s) => print!("\"{}\"", escape_string_for_c(s)),
         Expr::Variable(name) => print!("{}", name),
         Expr::ArrayLiteral(elements) => {
             print!("{{");
@@ -520,13 +696,14 @@ fn emit_expr(expr: &Expr) {
                     print!(")[0]))");
                 }
                 "substring" => {
-                    // We'll implement a simple substring helper
-                    // substring(str, start, length) -> just emit directly for now
-                    // In real implementation, we'd generate a helper function
-                    print!("/* substring not fully implemented */");
-                    print!("(");
-                    if !args.is_empty() {
+                    // Extract substring: substring(str, start, length)
+                    print!("__athon_substring(");
+                    if args.len() >= 3 {
                         emit_expr(&args[0]);
+                        print!(", ");
+                        emit_expr(&args[1]);
+                        print!(", ");
+                        emit_expr(&args[2]);
                     }
                     print!(")");
                 }

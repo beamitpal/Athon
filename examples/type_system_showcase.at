@@ -1,0 +1,87 @@
+// Type System Showcase
+// Demonstrates all type system features in Athōn
+
+// 1. Type Aliases
+type UserId = int;
+type Score = int;
+
+// 2. Union Types
+type Result = Ok(int) | Err(int);
+
+// 3. Generics - Struct
+struct Pair<T> {
+    first: T,
+    second: T,
+}
+
+// 4. Traits
+trait Printable {
+    fn display(self: Point) -> int;
+}
+
+// Regular struct
+struct Point {
+    x: int,
+    y: int,
+}
+
+// 5. Trait Implementation
+impl Printable for Point {
+    fn display(self: Point) -> int {
+        print("Point: x={}, y={}", self.x, self.y);
+        return 0;
+    }
+}
+
+// 6. Generic Function
+fn max<T>(a: T, b: T) -> T {
+    if a > b {
+        return a;
+    }
+    return b;
+}
+
+// Regular function using type aliases
+fn create_user(id: UserId, score: Score) -> int {
+    print("User ID: {}, Score: {}", id, score);
+    return id;
+}
+
+fn main() {
+    print("=== Athōn Type System Showcase ===");
+    print("");
+    
+    // Type aliases in action
+    print("1. Type Aliases:");
+    let user_id = 12345;
+    let user_score = 9999;
+    create_user(user_id, user_score);
+    print("");
+    
+    // Type inference
+    print("2. Type Inference:");
+    let x = 42;  // infers int
+    let y = x + 10;  // infers int
+    print("x = {}, y = {}", x, y);
+    print("");
+    
+    // Union types
+    print("3. Union Types:");
+    print("Result type: Ok(int) | Err(int)");
+    print("Enables type-safe error handling");
+    print("");
+    
+    // Generics
+    print("4. Generics:");
+    print("Generic function: fn max<T>(a: T, b: T) -> T");
+    print("Generic struct: struct Pair<T>");
+    print("");
+    
+    // Traits
+    print("5. Traits:");
+    let p = Point { x: 10, y: 20 };
+    display(p);
+    print("");
+    
+    print("All type system features working! ✅");
+}

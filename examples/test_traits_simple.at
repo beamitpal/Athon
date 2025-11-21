@@ -1,0 +1,20 @@
+// Simple traits test
+trait Display {
+    fn to_string(self: Point) -> int;
+}
+
+struct Point {
+    x: int,
+    y: int,
+}
+
+impl Display for Point {
+    fn to_string(self: Point) -> int {
+        print("Point");
+        return 0;
+    }
+}
+
+fn main() {
+    print("Traits syntax supported");
+}

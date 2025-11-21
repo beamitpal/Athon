@@ -1,0 +1,39 @@
+// Test driver for self-hosted lexer
+import "compiler/self_hosted/src/token.at"
+import "compiler/self_hosted/src/lexer.at"
+
+fn print_token_kind(kind: TokenKind) {
+    if kind == TokenKind::Fn { print("Fn"); }
+    if kind == TokenKind::Let { print("Let"); }
+    if kind == TokenKind::Identifier { print("Identifier"); }
+    if kind == TokenKind::LParen { print("LParen"); }
+    if kind == TokenKind::RParen { print("RParen"); }
+    if kind == TokenKind::LBrace { print("LBrace"); }
+    if kind == TokenKind::RBrace { print("RBrace"); }
+    if kind == TokenKind::EOF { print("EOF"); }
+    if kind == TokenKind::Number { print("Number"); }
+    if kind == TokenKind::Semicolon { print("Semicolon"); }
+}
+
+fn main() {
+    let input = "fn main() { let x = 42; }";
+    print("Input: {}", input);
+    print("Tokens:");
+    
+    let l = new_lexer(input);
+    
+    let i = 0;
+    while i < 20 {
+        let tok = next_token(l);
+        
+        print("  [{}] ", i);
+        print_token_kind(tok.kind);
+        print(" '{}' at {}:{}", tok.text, tok.line, tok.column);
+        
+        if tok.kind == TokenKind::EOF {
+            break;
+        }
+        
+        i = i + 1;
+    }
+}

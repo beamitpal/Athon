@@ -9,7 +9,7 @@ endif
 
 " Keywords
 syn keyword athonKeyword fn let if else while for in match return break continue loop
-syn keyword athonKeyword struct enum pub cap region
+syn keyword athonKeyword struct enum type trait impl pub cap region import
 
 " Types
 syn keyword athonType int bool string

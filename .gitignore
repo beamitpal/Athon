@@ -3,6 +3,7 @@
 # Compiled binaries
 athon-boot
 athon
+athon-fmt
 *.out
 *.exe
 *.o
@@ -27,6 +28,13 @@ build/
 dist/
 *.rlib
 *.pdb
+*.vsix
+
+# VS Code extension build
+editor-support/vscode/athon/node_modules/
+editor-support/vscode/athon/package-lock.json
+editor-support/vscode/athon/*.vsix
+editor-support/vscode/athon/athon-format.py
 
 # Rust build artifacts
 Cargo.lock
@@ -34,16 +42,17 @@ Cargo.lock
 *.orig
 
 # Editor and IDE files
-.vscode/
 .idea/
 *.swp
 *.swo
 *~
-.DS_Store
 *.sublime-*
 .project
 .classpath
 .settings/
+
+# Keep workspace settings
+!.vscode/settings.json
 
 # Temporary files
 *.tmp

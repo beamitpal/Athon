@@ -1,0 +1,37 @@
+// Type Inference Example
+// Demonstrates automatic type deduction
+
+fn main() {
+    // Basic type inference
+    let x = 42;           // infers int
+    let y = 10;           // infers int
+    let result = x + y;   // infers int
+    
+    print("x = {}", x);
+    print("y = {}", y);
+    print("result = {}", result);
+    
+    // Array type inference
+    let numbers = [1, 2, 3, 4, 5];  // infers int[]
+    print("First number: {}", numbers[0]);
+    
+    // Boolean inference
+    let is_valid = 1;  // Currently int, would infer bool with true/false
+    
+    // String inference
+    let message = "Hello, World!";  // infers string
+    print(message);
+    
+    // Function return type inference
+    let doubled = double_value(21);  // infers int from function return
+    print("Doubled: {}", doubled);
+}
+
+fn double_value(n: int) -> int {
+    return n * 2;
+}
+
+// Note: Full type inference would allow:
+// fn double(n) {  // infer parameter and return types
+//     return n * 2;
+// }

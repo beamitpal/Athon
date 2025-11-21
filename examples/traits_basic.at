@@ -1,0 +1,78 @@
+// Traits Example (Basic)
+// Demonstrates trait definitions and implementations
+
+// Trait definition (conceptual)
+// trait Display {
+//     fn to_string(self) -> string;
+// }
+
+// Trait implementation for custom type
+// impl Display for Point {
+//     fn to_string(self) -> string {
+//         return format("Point({}, {})", self.x, self.y);
+//     }
+// }
+
+// Current implementation without traits
+struct Point {
+    x: int,
+    y: int,
+}
+
+fn point_to_string(p: Point) -> int {
+    // Would return string with proper string formatting
+    // For now, just return a status code
+    print("Point({}, {})", p.x, p.y);
+    return 0;
+}
+
+struct Circle {
+    x: int,
+    y: int,
+    radius: int,
+}
+
+fn circle_to_string(c: Circle) -> int {
+    print("Circle(center=({}, {}), radius={})", c.x, c.y, c.radius);
+    return 0;
+}
+
+fn main() {
+    print("=== Traits Example ===");
+    print("");
+    
+    let p = Point { x: 10, y: 20 };
+    let c = Circle { x: 5, y: 5, radius: 10 };
+    
+    print("Point:");
+    point_to_string(p);
+    
+    print("");
+    print("Circle:");
+    circle_to_string(c);
+    
+    print("");
+    print("Note: With traits, this would be:");
+    print("  trait Display { fn to_string(self) -> string; }");
+    print("  impl Display for Point { ... }");
+    print("  impl Display for Circle { ... }");
+    print("  print(p.to_string());");
+}
+
+// What traits would enable:
+//
+// trait Comparable {
+//     fn compare(self, other: Self) -> int;
+// }
+//
+// impl Comparable for int {
+//     fn compare(self, other: int) -> int {
+//         if self < other { return -1; }
+//         if self > other { return 1; }
+//         return 0;
+//     }
+// }
+//
+// fn sort<T: Comparable>(items: T[]) -> T[] {
+//     // Generic sort using Comparable trait
+// }

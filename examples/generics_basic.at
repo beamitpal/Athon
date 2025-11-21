@@ -1,0 +1,75 @@
+// Generics Example (Basic)
+// Demonstrates generic functions and structs
+
+// Generic function - works with any type
+// fn max<T>(a: T, b: T) -> T {
+//     if a > b {
+//         return a;
+//     }
+//     return b;
+// }
+
+// For now, we need separate functions for each type
+fn max_int(a: int, b: int) -> int {
+    if a > b {
+        return a;
+    }
+    return b;
+}
+
+// Generic struct - Vec<T>
+// struct Vec<T> {
+//     data: T[],
+//     len: int,
+//     capacity: int,
+// }
+
+// For now, concrete type
+struct IntVec {
+    data: int,  // Would be int[] with proper array support
+    len: int,
+    capacity: int,
+}
+
+fn main() {
+    print("=== Generics Example ===");
+    print("");
+    
+    // Using generic-like functions
+    let a = 10;
+    let b = 20;
+    let maximum = max_int(a, b);
+    print("Max of {} and {}: {}", a, b, maximum);
+    
+    // Using generic-like structs
+    let vec = IntVec { data: 0, len: 0, capacity: 10 };
+    print("Vec capacity: {}", vec.capacity);
+    
+    print("");
+    print("Note: True generics would allow:");
+    print("  fn max<T>(a: T, b: T) -> T");
+    print("  struct Vec<T> { data: T[], len: int }");
+    print("  let v = Vec<int>::new();");
+}
+
+// What generics would enable:
+// 
+// fn identity<T>(x: T) -> T {
+//     return x;
+// }
+//
+// fn swap<T>(a: T, b: T) -> (T, T) {
+//     return (b, a);
+// }
+//
+// struct Pair<T, U> {
+//     first: T,
+//     second: U,
+// }
+//
+// fn main() {
+//     let x = identity(42);
+//     let y = identity("hello");
+//     
+//     let pair = Pair { first: 10, second: "test" };
+// }
