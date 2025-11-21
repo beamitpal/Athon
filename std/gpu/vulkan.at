@@ -1,0 +1,50 @@
+// Athōn Vulkan Bindings
+// Compile - time generated Vulkan bindings
+// Target: Q2 2026 (Mar - May 2026)
+
+// Vulkan instance
+type VkInstance = struct {
+    handle: int,
+    cap: Capability,
+};
+
+// Vulkan device
+type VkDevice = struct {
+    handle: int,
+    instance: *VkInstance,
+    cap: Capability,
+};
+
+// Create Vulkan instance
+fn vk_create_instance(app_name: string) - > VkInstance {
+    // TODO: Implement Vulkan instance creation
+    // - Load Vulkan library
+    // - Create instance
+    // - Attach capability
+    // - Zero runtime overhead
+    panic("vk_create_instance not implemented");
+}
+
+// Create logical device
+fn vk_create_device(instance: *VkInstance) - > VkDevice {
+    // TODO: Implement device creation
+    // - Enumerate physical devices
+    // - Select best device
+    // - Create logical device
+    // - Capability - tracked
+    panic("vk_create_device not implemented");
+}
+
+// Submit command buffer
+fn vk_submit_commands(device: *VkDevice, commands: []VkCommand) {
+    // TODO: Implement command submission
+    // - Check capability
+    // - Submit to GPU
+    // - Track completion
+    panic("vk_submit_commands not implemented");
+}
+
+// Placeholder for command type
+type VkCommand = struct {
+    // TODO: Define command structure
+};

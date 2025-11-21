@@ -1,0 +1,48 @@
+// Athōn Capability References
+// Linear capability references for memory safety
+// Target: Q1 2026 (Dec 2025 - Feb 2026)
+
+// Linear reference - can only be used once
+// Prevents use - after - free and double - free
+type CapRef < T > = struct {
+    ptr: *T,
+    cap: Capability,
+    linear: bool, // Enforced at compile time
+};
+
+// Create a capability reference
+fn cap_ref_new < T > (ptr: *T, cap: Capability) - > CapRef < T > {
+    // TODO: Implement capability reference creation
+    // - Validate pointer
+    // - Attach capability
+    // - Mark as linear
+    panic("cap_ref_new not implemented");
+}
+
+// Borrow capability reference (non - consuming)
+fn cap_ref_borrow < T > (ref: *CapRef < T > ) - > *T {
+    // TODO: Implement borrowing
+    // - Check capability is valid
+    // - Return pointer without consuming
+    // - Track borrow in type system
+    panic("cap_ref_borrow not implemented");
+}
+
+// Consume capability reference (linear)
+fn cap_ref_consume < T > (ref: CapRef < T > ) - > *T {
+    // TODO: Implement consumption
+    // - Check capability is valid
+    // - Mark as consumed (compile - time)
+    // - Return pointer
+    // - Prevent further use
+    panic("cap_ref_consume not implemented");
+}
+
+// Revoke capability
+fn cap_ref_revoke < T > (ref: CapRef < T > ) {
+    // TODO: Implement revocation
+    // - Invalidate capability
+    // - Prevent further access
+    // - Free resources
+    panic("cap_ref_revoke not implemented");
+}

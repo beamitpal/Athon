@@ -1,252 +1,311 @@
-# Athōn Language (athon)
+# Athōn Language
 
-Athōn is a sovereign, capability-secure, quantum-resistant systems programming language designed for high-assurance environments. It prioritizes complete self-reliance, enforcing a strict "no external dependencies" policy to ensure supply chain security and build reproducibility. Athōn is built to last for decades, with a focus on deterministic compilation and a zero-trust architecture where every resource access requires an explicit capability token.
+**Building the Operating System of the Next Internet**
 
-## Core Invariants
+Athōn is a sovereign, capability-secure systems programming language designed for bare-metal execution, GPU programming, and building the next generation of secure computing platforms.
 
-1. **Sovereignty**: Zero external dependencies. The repository is self-contained.
-2. **Security**: Capability-based security model enforced at the type level.
-3. **Reproducibility**: Bit-for-bit deterministic builds, verified by double-compilation.
-4. **Permanence**: Single monorepo, air-gap friendly, designed for long-term maintenance.
+## Vision
 
-## Repository Layout
+We're not building another programming language.  
+We're building:
+- A real operating system (Nova microkernel)
+- A high-performance rendering engine (Aurora)
+- The foundation for a capability-secure internet
 
-- `athon-spec/`: The normative specification of the language and its invariants.
-- `compiler/`: The self-hosting compiler implementation (bootstrap, frontend, IR, backend).
-- `std/`: The minimal standard library, strictly namespaced and capability-gated.
-- `examples/`: 31 working example programs demonstrating all language features.
-- `docs/`: Language guide, API reference, and architectural documentation.
-- `editor-support/`: Professional editor support for VS Code, Sublime Text, and Vim.
-- `ai/`: Policies and templates for AI-assisted development within the sovereign constraint.
-- `ci/`: Shell scripts for reproducible builds and static analysis (no external CI services).
-- `.project/`: Project management, status reports, and governance documents.
+**The throne is forged in Athōn.**
 
-**📖 Navigation:** See [INDEX.md](INDEX.md) for quick navigation or [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md) for detailed structure.
+---
 
-## Current Status
+## Core Features
 
-**🎉 Self-Hosting Complete!** Athōn can now compile itself.
+### ✅ Complete (2025)
+- **Self-hosting compiler** - 5 phases, compiles itself
+- **Capability-based security** - Enforced at type level
+- **Zero external dependencies** - Truly air-gapped
+- **Reproducible builds** - Bit-identical compilation
+- **Modern type system** - Generics, traits, union types, inference
 
-**Bootstrap Compiler:** Fully functional with escape sequence support  
-**Self-Hosted Compiler:** 5 phases complete - true self-compilation achieved  
-**std/core Library:** Option, Result, Ordering types implemented  
-**Examples:** 31 working programs demonstrating all features  
-**Documentation:** Complete language guide, API reference, and examples catalog  
+### 🚧 In Progress (2026)
+- **RISC-V backend** - Native bare-metal code generation
+- **WebAssembly backend** - Run in any browser
+- **Region allocator** - Zero-GC memory management
+- **Vulkan/Metal bindings** - GPU programming
+- **Reactive signals** - Fine-grained UI reactivity
+- **Nova microkernel** - Bootable on real hardware
+- **Aurora Engine** - 120 FPS rendering
 
-See [SELF_COMPILATION_COMPLETE.md](SELF_COMPILATION_COMPLETE.md) for details.  
-**Test Coverage:** 100% of examples passing
+---
 
-## Getting Started
+## Quick Start
 
-### 🚀 One-Command Installation
+### Installation
 
 ```bash
-git clone https://github.com/yourusername/athon.git
+git clone https://github.com/beamitpal/athon.git
 cd athon
 ./install.sh
 ```
 
-This installs both the compiler and the unified CLI tool.
-
-### ⚡ Quick Start with CLI
-
-The easiest way to use Athōn:
+### Unified CLI
 
 ```bash
-# Run a program (compile + execute in one step)
-./athon run examples/hello.at
+# Interactive menu
+./athon-cli.sh
 
-# Create a new project
-./athon new my-project
-cd my-project
-./athon run src/main.at
-
-# Build an optimized executable
-./athon build hello.at -O -o my-app
-
-# See all commands
-./athon help
+# Or use commands directly
+./athon-cli.sh install      # Install compiler
+./athon-cli.sh test         # Test self-compilation
+./athon-cli.sh build-ext    # Build VS Code extension
 ```
 
-**Why use the CLI?** It handles all the compilation steps automatically, manages intermediate files, and provides a streamlined developer experience.
+### Hello World
 
-### 📚 Learn More
-
-- **[CLI Guide](CLI_GUIDE.md)** - Complete CLI documentation with workflows and tips
-- **[Quick Start](QUICKSTART.md)** - 5-minute getting started guide
-- **[Installation Guide](INSTALL.md)** - Detailed installation instructions
-
-### 🔧 Manual Compilation (Advanced)
-
-If you prefer direct compiler access:
+```athon
+fn main() {
+    print("Hello, Athōn!");
+}
+```
 
 ```bash
-# Build the bootstrap compiler
-cd compiler/bootstrap
-bash build.sh
-cd ../..
-
-# Compile manually
-./athon-boot examples/hello.at > hello.c
-gcc hello.c -o hello
-./hello
+./athon examples/hello.at
 ```
-
-## Documentation
-
-### Learning Resources
-- **[Language Guide](docs/language-guide.md)** - Complete tutorial from basics to advanced features
-- **[API Reference](docs/api-reference.md)** - Detailed documentation of all built-in functions
-- **[Examples Index](docs/examples-index.md)** - Catalog of all 31 examples with learning paths
-- **[Syntax Specification](athon-spec/syntax.md)** - Formal syntax rules
-
-### Technical Documentation
-- **[Architecture](docs/architecture.md)** - Compiler architecture and design
-- **[Capability Security](docs/capability-security.md)** - Security model documentation
-- **[Reproducible Builds](docs/reproducible-builds.md)** - Build reproducibility guide
-- **[Test Results](TEST_RESULTS.md)** - Complete test coverage report
-
-## Language Features
-
-### Core Language
-- ✓ Variables and types (int, bool, string)
-- ✓ Functions with parameters and return values
-- ✓ Control flow (if/else, while, for)
-- ✓ Operators (arithmetic, comparison, logical, unary)
-- ✓ Comments (single-line and multi-line)
-
-### Data Structures
-- ✓ Arrays (literals, indexing, length)
-- ✓ Structs (definition, literals, member access)
-- ✓ Enums (definition, variants, comparison)
-
-### Advanced Features
-- ✓ Pattern matching (literals, enums, wildcards)
-- ✓ Recursive functions
-- ✓ Printf-style formatting
-
-### Standard Library
-- ✓ **Math:** abs, min, max, pow, sqrt, mod
-- ✓ **File I/O:** file_read, file_write, file_append, file_exists
-- ✓ **String:** length, concat, compare
-- ✓ **Array:** array_length
-
-## Example Programs
-
-Browse the `examples/` directory for working code:
-
-**Beginner (14 examples):**
-- hello.at, variables.at, arithmetic.at, control_flow.at, loops.at, etc.
-
-**Intermediate (8 examples):**
-- structs.at, enums.at, match_test.at, math.at, file_io_simple.at, etc.
-
-**Advanced (7 examples):**
-- geometry.at, file_logger.at, data_processor.at, showcase.at, etc.
-
-See [Examples Index](docs/examples-index.md) for complete catalog with learning paths.
-
-## Project Resources
-
-📚 **[Documentation Index](DOCUMENTATION_INDEX.md)** - Complete guide to all documentation
-
-### For Users
-- **[Quick Start Guide](docs/language-guide.md#getting-started)** - Get started in 5 minutes
-- **[Language Guide](docs/language-guide.md)** - Complete tutorial
-- **[API Reference](docs/api-reference.md)** - Function documentation
-- **[Examples](docs/examples-index.md)** - 31 working programs
-- **[Editor Support](editor-support/README.md)** - Syntax highlighting for VS Code, Vim, Sublime Text
-
-### For Contributors
-- **[Contributing Guide](CONTRIBUTING.md)** - How to contribute
-- **[Project Status](PROJECT_STATUS.md)** - Current state and metrics
-- **[Changelog](CHANGELOG.md)** - Version history
-
-### Technical Documentation
-- **[Architecture](docs/architecture.md)** - Compiler design
-- **[Capability Security](docs/capability-security.md)** - Security model
-- **[Reproducible Builds](docs/reproducible-builds.md)** - Build system
-- **[Bootstrap Compiler](compiler/bootstrap/README.md)** - Implementation details
-
-### Specification
-- **[Syntax](athon-spec/syntax.md)** - Language syntax
-- **[Semantics](athon-spec/semantics.md)** - Language semantics
-- **[Capabilities](athon-spec/capabilities.md)** - Security model
-- **[Roadmap](athon-spec/roadmap.md)** - Future plans
-
-## Project Status
-
-**Version:** 0.3.0  
-**Phase:** Bootstrap Complete ✅  
-**Test Coverage:** 100% (29/29 examples passing)  
-**Documentation:** Complete
-
-See [PROJECT_STATUS.md](PROJECT_STATUS.md) for detailed metrics and progress.
-
-## Governance
-
-This project is governed by a "Sovereign Charter" that prioritizes the language's invariants over feature velocity. Changes are managed through a Request for Comments (RFC) process that requires cryptographic signing of all commits. A quorum of maintainers must approve changes to the core specification or security model.
-
-See [GOVERNANCE.md](GOVERNANCE.md) and [SOVEREIGN_CHARTER.md](SOVEREIGN_CHARTER.md) for details.
-
-## Contributing
-
-We welcome contributions! Please read:
-1. [CONTRIBUTING.md](CONTRIBUTING.md) - Contribution guidelines
-2. [task.md](task.md) - Open tasks
-3. [PROJECT_STATUS.md](PROJECT_STATUS.md) - Current status
-
-## Quick Reference
-
-### Install Syntax Highlighting
-
-**VS Code:**
-```bash
-cp -r editor-support/vscode/athon ~/.vscode/extensions/athon-language-0.3.0
-```
-
-**Sublime Text:**
-```bash
-cp editor-support/sublime-text/Athon.sublime-syntax ~/.config/sublime-text/Packages/User/
-```
-
-**Vim:**
-```bash
-mkdir -p ~/.vim/syntax ~/.vim/ftdetect
-cp editor-support/vim/syntax/athon.vim ~/.vim/syntax/
-cp editor-support/vim/ftdetect/athon.vim ~/.vim/ftdetect/
-```
-
-See [editor-support/INSTALLATION.md](editor-support/INSTALLATION.md) for detailed instructions.
-
-### Compile and Run
-
-```bash
-# Compile Athōn to C
-./athon-boot examples/hello.at > hello.c
-
-# Compile C to executable
-gcc hello.c -o hello
-
-# Run
-./hello
-```
-
-### One-liner
-```bash
-./athon-boot examples/hello.at > /tmp/test.c && gcc /tmp/test.c -o /tmp/test && /tmp/test
-```
-
-## License
-
-See [LICENSE](LICENSE) for license information.
-
-## Contact
-
-- **Issues:** [Issue Tracker]
-- **Discussions:** [Discussion Forum]
-- **Email:** me@beamitpal.com (Placeholder)
 
 ---
 
-**Version:** 0.3.0 | **Status:** Bootstrap Complete ✅ | **Test Coverage:** 100%
+## 2026 Roadmap
+
+### Q1 (Dec 2025 - Mar 2026): Foundation
+- **Memory Management**: Region allocator + capability references
+- **RISC-V Backend**: Native code generation
+- **Freestanding**: no_std + custom linker
+
+**Milestone**: Hello World boots on QEMU RISC-V
+
+### Q2 (Apr - Jun 2026): Graphics & Reactivity
+- **GPU Programming**: Vulkan/Metal bindings
+- **Reactive System**: Fine-grained signals
+- **Scene Graph**: UI primitives
+
+**Milestone**: 120 FPS animated UI
+
+### Q3 (Jul - Sep 2026): Operating System
+- **Process Management**: Capability-secured spawning
+- **Nova Microkernel**: Bootable on real hardware
+- **Aurora Engine**: Production-ready rendering
+
+**Milestone**: Boot Nova on RISC-V board
+
+### Q4 (Oct - Dec 2026): Web Platform
+- **WebAssembly Backend**: Run in browsers
+- **Nova Protocol**: Post-quantum networking
+- **Browser Integration**: Aurora in any browser
+
+**Milestone**: Aurora Engine running in browser
+
+---
+
+## Project Structure
+
+```
+athon/
+├── compiler/
+│   ├── bootstrap/          # Bootstrap compiler (Rust)
+│   └── backend/
+│       ├── riscv64/        # Native RISC-V (2026)
+│       └── wasm64/         # WebAssembly (2026)
+├── std/
+│   ├── core/               # Core types (Option, Result)
+│   ├── mem/                # Memory management (2026)
+│   ├── os/                 # OS layer (2026)
+│   ├── gpu/                # GPU programming (2026)
+│   ├── reactive/           # Reactivity (2026)
+│   ├── ui/                 # Scene graph (2026)
+│   └── net/                # Networking (2026)
+├── kernel/                 # Nova microkernel (2026)
+├── examples/               # 31+ working examples
+├── docs/                   # Documentation
+├── editor-support/         # VS Code, Sublime, Vim
+└── athon-cli.sh           # Unified CLI tool
+```
+
+---
+
+## Documentation
+
+- **README.md** (this file) - Overview and roadmap
+- **CONTRIBUTING.md** - How to contribute
+- **DEVELOPMENT.md** - Development guide and architecture
+
+Additional docs in `docs/`:
+- Language guide
+- API reference
+- Architecture details
+- Editor setup
+
+---
+
+## Features
+
+### Language
+- **Modern syntax** - Clean, expressive
+- **Type inference** - Smart type deduction
+- **Generics** - Parametric polymorphism
+- **Traits** - Interface-based polymorphism
+- **Union types** - Type-safe enums
+- **Pattern matching** - Exhaustive matching
+- **Capability security** - Resource access control
+
+### Compiler
+- **Self-hosting** - Compiles itself
+- **5-phase architecture** - Lexer, Parser, Type Checker, IR, Codegen
+- **Multiple backends** - C (now), RISC-V (2026), WASM (2026)
+- **Reproducible** - Bit-identical builds
+- **Zero dependencies** - Completely self-contained
+
+### Standard Library
+- **Core types** - Option, Result, Ordering
+- **Memory** - Region allocator (2026)
+- **OS** - Process management (2026)
+- **GPU** - Vulkan/Metal (2026)
+- **UI** - Reactive signals (2026)
+- **Network** - Nova Protocol (2026)
+
+### Tooling
+- **VS Code extension** - Full IDE support
+- **Syntax highlighting** - All editors
+- **Code formatter** - Consistent style
+- **Package manager** - athon-pkg (2026)
+
+---
+
+## Examples
+
+31+ working examples demonstrating all features:
+
+```bash
+# Basic
+./athon examples/hello.at
+./athon examples/variables.at
+./athon examples/functions.at
+
+# Advanced
+./athon examples/generics.at
+./athon examples/traits.at
+./athon examples/union_types.at
+
+# 2026 Examples
+./athon examples/kernel_spawn.at    # Process isolation
+./athon examples/render_scene.at    # 120 FPS UI
+```
+
+---
+
+## Editor Support
+
+### VS Code (Recommended)
+
+```bash
+# Build and install extension
+./athon-cli.sh build-ext
+./athon-cli.sh install-ext
+
+# Or use interactive menu
+./athon-cli.sh
+# Select option 9 or 10
+```
+
+Features:
+- ✅ Syntax highlighting
+- ✅ Code snippets (20+ templates)
+- ✅ Auto-completion
+- ✅ Format on save
+- ✅ File icons (Material Icon Theme)
+
+### Other Editors
+
+```bash
+cd editor-support
+./install-editor-support.sh
+```
+
+Supports: Sublime Text, Vim, Neovim
+
+---
+
+## Testing
+
+```bash
+# Test self-compilation
+./athon-cli.sh test
+
+# Test all examples
+./athon-cli.sh test-examples
+
+# Verify installation
+./athon-cli.sh verify
+```
+
+---
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for:
+- Code of conduct
+- Development workflow
+- Coding standards
+- How to submit PRs
+
+---
+
+## Development Priorities
+
+### December 2025
+- [ ] Region allocator (`std/mem/region.at`)
+- [ ] Capability references (`std/mem/cap_ref.at`)
+
+### January 2026
+- [ ] RISC-V instruction encoding
+- [ ] Register allocation
+- [ ] Function calls (ABI)
+
+### February 2026
+- [ ] Freestanding environment (`std/os/no_std.at`)
+- [ ] Custom linker script
+- [ ] Boot on QEMU
+
+See [DEVELOPMENT.md](DEVELOPMENT.md) for detailed roadmap.
+
+---
+
+## Community
+
+- **GitHub**: https://github.com/beamitpal/athon
+- **Issues**: Report bugs and feature requests
+- **Discussions**: Ask questions and share ideas
+
+---
+
+## License
+
+See [LICENSE](LICENSE) file.
+
+---
+
+## Status
+
+**Current Version**: 0.4.0  
+**Self-Hosting**: ✅ Complete  
+**Examples**: 31+ working  
+**Editor Support**: ✅ VS Code, Sublime, Vim  
+**2026 Roadmap**: 🚧 In Progress
+
+---
+
+**You are not building another programming language.**  
+**You are building the operating system of the next internet.**
+
+**The throne is forged in Athōn.** 🚀
+
+---
+
+*Last Updated: November 21, 2025*

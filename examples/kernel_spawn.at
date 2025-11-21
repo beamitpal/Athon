@@ -1,0 +1,73 @@
+// Example: Spawning Isolated Processes
+// Demonstrates capability - based process isolation
+// Target: Q3 2026
+
+fn main() {
+    print("Nova Kernel - Process Spawning Demo");
+
+    // Create capabilities for child process
+    let file_cap = cap_create(CapType::FileRead);
+    let net_cap = cap_create(CapType::NetworkSend);
+
+    // Spawn process with limited capabilities
+    let proc = process_spawn(worker_task, [file_cap, net_cap]);
+
+    print("Spawned process with PID: {}", proc.pid);
+
+    // Send message to process
+    process_send(&proc, "Hello from parent!");
+
+    // Receive response
+    let response = process_recv(&proc);
+    print("Child responded: {}", response);
+
+    // Revoke network capability
+    cap_revoke(net_cap);
+    print("Revoked network capability");
+
+    // Child can no longer access network
+    // Any attempt will fail at compile time or runtime
+
+    print("Demo complete");
+}
+
+fn worker_task() - > string {
+    print("Worker: Started with capabilities");
+
+    // Can read files (has capability)
+    let data = file_read(" / data.txt");
+    print("Worker: Read file: {}", data);
+
+    // Can send network data (has capability)
+    net_send("example.com", data);
+    print("Worker: Sent data over network");
+
+    // After parent revokes net_cap, this would fail:
+    // net_send("example.com", "more data"); // Compile error or runtime panic
+
+    return "Task completed";
+}
+
+// Placeholder types (will be implemented in std / )
+type CapType = enum {
+    FileRead,
+    FileWrite,
+    NetworkSend,
+    NetworkRecv,
+};
+
+fn cap_create(typ: CapType) - > Capability {
+    panic("cap_create not implemented");
+}
+
+fn cap_revoke(cap: Capability) {
+    panic("cap_revoke not implemented");
+}
+
+fn file_read(path: string) - > string {
+    panic("file_read not implemented");
+}
+
+fn net_send(host: string, data: string) {
+    panic("net_send not implemented");
+}

@@ -1,0 +1,40 @@
+// Athōn Freestanding Environment
+// #![no_std] core - no operating system dependencies
+// Target: Q1 2026 (Feb - Apr 2026)
+
+// Freestanding entry point
+// Called directly by bootloader or kernel
+fn _start() {
+    // TODO: Implement freestanding entry
+    // - Initialize stack
+    // - Set up capability system
+    // - Call main()
+    // - Handle exit
+    panic("_start not implemented");
+}
+
+// Panic handler for freestanding environment
+fn panic_handler(msg: string) {
+    // TODO: Implement panic without OS
+    // - Write to serial / framebuffer
+    // - Halt CPU
+    // - No unwinding (compile - time eliminated)
+    loop {}
+}
+
+// Memory allocation without OS
+fn alloc_no_std(size: int) - > *u8 {
+    // TODO: Implement allocation
+    // - Use region allocator
+    // - No malloc / free
+    // - Capability - tracked
+    panic("alloc_no_std not implemented");
+}
+
+// Deallocation without OS
+fn dealloc_no_std(ptr: *u8) {
+    // TODO: Implement deallocation
+    // - Region - based
+    // - Revoke capability
+    panic("dealloc_no_std not implemented");
+}

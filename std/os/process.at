@@ -1,0 +1,54 @@
+// Athōn Capability - Secured Processes
+// cap Process < T > , spawn, revoke
+// Target: Q3 2026 (May - Jun 2026)
+
+// Process with capability - based permissions
+type Process < T > = struct {
+    pid: int,
+    cap: Capability,
+    state: ProcessState,
+    data: T,
+};
+
+type ProcessState = enum {
+    Running,
+    Suspended,
+    Terminated,
+};
+
+// Spawn a new process with capabilities
+fn process_spawn < T > (entry: fn () - > T, caps: []Capability) - > Process < T > {
+    // TODO: Implement process spawning
+    // - Create isolated address space
+    // - Grant only specified capabilities
+    // - Start execution
+    // - Track in capability system
+    panic("process_spawn not implemented");
+}
+
+// Revoke process capabilities
+fn process_revoke(proc: *Process) {
+    // TODO: Implement capability revocation
+    // - Invalidate all process capabilities
+    // - Prevent further resource access
+    // - Optionally terminate process
+    panic("process_revoke not implemented");
+}
+
+// Send message to process (capability - checked)
+fn process_send < T > (proc: *Process < T > , msg: T) {
+    // TODO: Implement IPC
+    // - Check sender capability
+    // - Transfer message
+    // - Capability - multiplexed
+    panic("process_send not implemented");
+}
+
+// Receive message from process
+fn process_recv < T > (proc: *Process < T > ) - > T {
+    // TODO: Implement IPC receive
+    // - Check receiver capability
+    // - Block until message
+    // - Return message
+    panic("process_recv not implemented");
+}

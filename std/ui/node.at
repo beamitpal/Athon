@@ -1,0 +1,55 @@
+// Athōn Scene Graph Nodes
+// Scene graph primitives with reactive signals
+// Target: Q2 2026 (Apr - Jun 2026)
+
+// UI node in scene graph
+type Node = struct {
+    id: int,
+    position: Signal < Vec2 > ,
+    size: Signal < Vec2 > ,
+    children: []Node,
+    cap: Capability,
+};
+
+// 2D vector
+type Vec2 = struct {
+    x: float,
+    y: float,
+};
+
+// Create a new node
+fn node_new(x: float, y: float) - > Node {
+    // TODO: Implement node creation
+    // - Create reactive position
+    // - Create reactive size
+    // - Initialize children
+    // - Capability - tracked
+    panic("node_new not implemented");
+}
+
+// Add child node
+fn node_add_child(parent: *Node, child: Node) {
+    // TODO: Implement child addition
+    // - Check capability
+    // - Add to children list
+    // - Update scene graph
+    panic("node_add_child not implemented");
+}
+
+// Update node position (reactive)
+fn node_set_position(node: *Node, x: float, y: float) {
+    // TODO: Implement position update
+    // - Update signal
+    // - Trigger re - render
+    // - Propagate to children
+    panic("node_set_position not implemented");
+}
+
+// Render node and children
+fn node_render(node: *Node) {
+    // TODO: Implement rendering
+    // - Render this node
+    // - Recursively render children
+    // - Use GPU acceleration
+    panic("node_render not implemented");
+}

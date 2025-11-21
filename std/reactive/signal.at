@@ -1,0 +1,46 @@
+// Athōn Reactive Signals
+// Fine - grained reactivity for Aurora Engine
+// Target: Q2 2026 (Apr - Jun 2026)
+
+// Reactive signal - automatically tracks dependencies
+type Signal < T > = struct {
+    value: T,
+    subscribers: []fn (T),
+    cap: Capability,
+};
+
+// Create a new signal
+fn signal_new < T > (initial: T) - > Signal < T > {
+    // TODO: Implement signal creation
+    // - Initialize value
+    // - Set up subscriber list
+    // - Capability - tracked
+    panic("signal_new not implemented");
+}
+
+// Get signal value (tracks dependency)
+fn signal_get < T > (sig: *Signal < T > ) - > T {
+    // TODO: Implement reactive get
+    // - Return current value
+    // - Track caller as dependent
+    // - Auto - update on change
+    panic("signal_get not implemented");
+}
+
+// Set signal value (triggers updates)
+fn signal_set < T > (sig: *Signal < T > , value: T) {
+    // TODO: Implement reactive set
+    // - Update value
+    // - Notify all subscribers
+    // - Batch updates for efficiency
+    panic("signal_set not implemented");
+}
+
+// Computed signal (derived from others)
+fn signal_computed < T > (compute: fn () - > T) - > Signal < T > {
+    // TODO: Implement computed signals
+    // - Track dependencies automatically
+    // - Re - compute on dependency change
+    // - Memoize result
+    panic("signal_computed not implemented");
+}

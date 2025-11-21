@@ -1,0 +1,65 @@
+// Example: 120 FPS Reactive UI Demo
+// Demonstrates Aurora Engine with reactive signals
+// Target: Q4 2026
+
+fn main() {
+    print("Aurora Engine - Reactive UI Demo");
+
+    // Initialize Vulkan
+    let instance = vk_create_instance("Aurora Demo");
+    let device = vk_create_device(&instance);
+
+    // Create scene graph
+    let root = node_new(0.0, 0.0);
+
+    // Create reactive position signal
+    let x_pos = signal_new(0.0);
+    let y_pos = signal_new(0.0);
+
+    // Create animated box
+    let box_node = node_new(signal_get(&x_pos), signal_get(&y_pos));
+    node_add_child(&root, box_node);
+
+    // Animation loop (120 FPS)
+    let frame = 0;
+    loop {
+        // Update position (reactive)
+        let new_x = sin(frame as float * 0.01) * 100.0;
+        let new_y = cos(frame as float * 0.01) * 100.0;
+
+        signal_set(&x_pos, new_x);
+        signal_set(&y_pos, new_y);
+
+        // Render scene (automatically updates due to signals)
+        node_render(&root);
+
+        // Submit to GPU
+        vk_submit_commands(&device, render_commands);
+
+        frame = frame + 1;
+
+        // Target 120 FPS (8.33ms per frame)
+        sleep_ms(8);
+
+        if frame > 1000 {
+            break ;
+        }
+    }
+
+    print("Demo complete - rendered {} frames", frame);
+}
+
+// Placeholder functions (will be implemented in std / )
+fn sin(x: float) - > float {
+    panic("sin not implemented");
+}
+
+fn cos(x: float) - > float {
+    panic("cos not implemented");
+}
+
+fn sleep_ms(ms: int) {
+    panic("sleep_ms not implemented");
+}
+
+let render_commands: []VkCommand = [];

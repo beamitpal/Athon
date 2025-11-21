@@ -1,0 +1,51 @@
+// Athōn Region Allocator
+// Zero - GC arena allocator with capability tracking
+// Target: Q1 2026 (Dec 2025 - Feb 2026)
+
+// Region - based memory management
+// All allocations in a region are freed together
+// Provides O(1) allocation and deallocation
+// Capability - tracked for security
+
+type Region = struct {
+    base: *u8,
+    size: int,
+    used: int,
+    cap: Capability,
+};
+
+// Create a new memory region
+fn region_new(size: int) - > Region {
+    // TODO: Implement region allocation
+    // - Allocate memory block
+    // - Initialize capability
+    // - Track in capability system
+    panic("region_new not implemented");
+}
+
+// Allocate from region
+fn region_alloc(region: *Region, size: int) - > *u8 {
+    // TODO: Implement bump allocation
+    // - Check capability
+    // - Bump pointer
+    // - Return aligned memory
+    panic("region_alloc not implemented");
+}
+
+// Free entire region
+fn region_free(region: *Region) {
+    // TODO: Implement region deallocation
+    // - Revoke capability
+    // - Free memory block
+    // - Clear tracking
+    panic("region_free not implemented");
+}
+
+// Reset region (keep memory, reset pointer)
+fn region_reset(region: *Region) {
+    // TODO: Implement region reset
+    // - Keep capability
+    // - Reset used pointer
+    // - Optionally zero memory
+    panic("region_reset not implemented");
+}
